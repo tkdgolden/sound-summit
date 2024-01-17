@@ -3,7 +3,6 @@
 import os
 from unittest import TestCase
 from models import db, Word, Sound, List, WordList, WordSound
-from seed import seed
 
 os.environ['DATABASE_URL'] = "postgresql:///sound_summit_test"
 
@@ -91,4 +90,4 @@ class IndexTestCase(TestCase):
             html = resp.get_data(as_text=True)
 
         self.assertEqual(resp.status_code, 200)
-        self.assertIn("<h1>Sound Summit Explorers</h1>", html)
+        self.assertIn("<button>test</button>", html)

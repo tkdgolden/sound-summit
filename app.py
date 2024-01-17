@@ -17,7 +17,9 @@ db.create_all()
 def index():
     """ Homepage """
 
-    return render_template("index.html")
+    lists = List.query.all()
+
+    return render_template("index.html", lists=lists)
 
 @app.route("/new_wordlist", methods=["GET", "POST"])
 def new_wordlist():
