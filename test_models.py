@@ -51,11 +51,11 @@ class WordModelTestCase(TestCase):
     def setUp(self):
         """ create test client, add sample data """
 
+        WordList.query.delete()
+        WordSound.query.delete()
         Sound.query.delete()
         Word.query.delete()
         List.query.delete()
-        WordList.query.delete()
-        WordSound.query.delete()
 
         self.client = app.test_client()
 
@@ -108,11 +108,11 @@ class ListModelTestCase(TestCase):
     def setUp(self):
         """ create test client, add sample data """
 
+        WordList.query.delete()
+        WordSound.query.delete()
         Sound.query.delete()
         Word.query.delete()
         List.query.delete()
-        WordList.query.delete()
-        WordSound.query.delete()
 
         self.client = app.test_client()
 
@@ -159,11 +159,11 @@ class WordSoundModelTestCase(TestCase):
     def setUp(self):
         """ create test client, add sample data """
 
+        WordList.query.delete()
+        WordSound.query.delete()
         Sound.query.delete()
         Word.query.delete()
         List.query.delete()
-        WordList.query.delete()
-        WordSound.query.delete()
 
         self.client = app.test_client()
 
@@ -214,11 +214,11 @@ class WordListModelTestCase(TestCase):
     def setUp(self):
         """ create test client, add sample data """
 
+        WordList.query.delete()
+        WordSound.query.delete()
         Sound.query.delete()
         Word.query.delete()
         List.query.delete()
-        WordList.query.delete()
-        WordSound.query.delete()
 
         self.client = app.test_client()
 

@@ -36,10 +36,9 @@ def new_wordlist():
                 w = Word(word=word)
                 db.session.add(w)
                 wsounds = w.get_sounds()
-                print(wsounds)
                 counter = 0
                 for sound in wsounds:
-                    sound_obj = Sound.query.get_or_404(sound)
+                    Sound.query.get_or_404(sound)
                     wsound = WordSound(word_id=w.word_id, sound_symbol=sound, index=counter)
                     db.session.add(wsound)
                     counter += 1
