@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Index{% endblock %}
+{% block body %}
+<h1>{{ list.list_name }}</h1>
+<div>
+    {% for word in word_sounds %}
+        <p>{{ word.word }}</p>
+        <p>
+            {% for sound in word_sounds[word] %}
+                
+                <button id="{{ sound.ipa_symbol }}" class="sound" type="button">{{ sound.ipa_symbol }}</button>
+            {% endfor %}
+        </p>
+    {% endfor %}
+</div>
+{% endblock %}

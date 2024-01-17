@@ -52,3 +52,16 @@ def new_wordlist():
         return redirect("/")
     
     return render_template("new_wordlist.html", form=form)
+
+@app.route("/<int:list_id>")
+def gameplay(list_id):
+    """ Play a game with the selected list """
+
+    list = List.query.get_or_404(list_id)
+    words = list.words
+    word_sounds = {}
+    for word in words:
+        sounds = word.sounds
+        word_sounds[word] = sounds
+    
+    return render_template("gameplay.html", list=list, word_sounds=word_sounds)
