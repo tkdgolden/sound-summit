@@ -54,6 +54,7 @@ class Word(db.Model):
 
         response = requests.request("POST", url, json=payload, headers=headers)
         pronunciation = json.loads(response.text)["pronunciation"]
+        print(pronunciation)
         sounds = []
         prev = ""
         for char in pronunciation:
@@ -78,6 +79,8 @@ class Word(db.Model):
                 else:
                     sounds.append(char)
                     prev = ""
+        if prev in VOWELS:
+            sounds.append(prev)
         return sounds
     
     def __repr__(self):
