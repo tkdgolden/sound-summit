@@ -20,11 +20,11 @@ class SoundModelTestCase(TestCase):
     def setUp(self):
         """ create test client, add sample data """
 
+        WordList.query.delete()
+        WordSound.query.delete()
         Sound.query.delete()
         Word.query.delete()
         List.query.delete()
-        WordList.query.delete()
-        WordSound.query.delete()
 
         self.client = app.test_client()
 
@@ -74,6 +74,32 @@ class WordModelTestCase(TestCase):
         db.session.commit()
 
         self.assertEqual(apple.word, "apple")
+    
+    def test_word_repr_method(self):
+        """ does the repr look like expected? """
+
+        a = Sound(ipa_symbol="a")
+        apple = Word(word="apple")
+
+        db.session.add(apple)
+        db.session.add(a)
+        db.session.commit()
+
+        sound = WordSound(word_id = apple.word_id, sound_symbol=a.ipa_symbol, index=0)
+
+        db.session.add(sound)
+
+        display = apple.__repr__()
+        self.assertEqual(display, f"<Word #{apple.word_id}: apple, [<Sound a>]>")
+
+    def test_word_get_sounds_method(self):
+        """ does method correctly call API for pronunciation and return array of ipa symbols? """
+
+        apple = Word(word="apple")
+
+        db.session.add(apple)
+        apple_sounds = apple.get_sounds()
+        self.assertEqual(apple_sounds, ["æ", "p", "ə", "l"])
 
 
 class ListModelTestCase(TestCase):
@@ -106,6 +132,25 @@ class ListModelTestCase(TestCase):
 
         self.assertEqual(fruit.list_name, "fruit")
         self.assertEqual(fruit.difficulty, 1)
+
+    def test_list_repr_method(self):
+        """ does list display as expected? """
+
+        apple = Word(word="apple")
+        fruit = List(list_name="fruit", difficulty=1)
+        a = Sound(ipa_symbol="a")
+        db.session.add(a)
+        db.session.add(fruit)
+        db.session.add(apple)
+        apple.sounds.append(a)
+        db.session.commit()
+
+        word = WordList(word_id = apple.word_id, list_id = fruit.list_id)
+
+        db.session.add(word)
+        display = fruit.__repr__()
+
+        self.assertEqual(display, f"<List #{fruit.list_id}: fruit, 1, [<Word #{apple.word_id}: apple, [<Sound a>]>]>")
 
 
 class WordSoundModelTestCase(TestCase):
