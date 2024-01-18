@@ -17,6 +17,15 @@ class Sound(db.Model):
         primary_key = True
     )
 
+    keyword = db.Column(
+        db.Text
+    )
+
+    def __repr__(self):
+        """ displays sound """
+
+        return f"<Sound {self.ipa_symbol}: {self.keyword}>"
+
 
 class Word(db.Model):
     """ words and their ids """  
