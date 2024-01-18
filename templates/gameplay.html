@@ -7,8 +7,7 @@
         <p>{{ word.word }}</p>
         <p>
             {% for sound in word_sounds[word] %}
-                
-                <button id="{{ sound.ipa_symbol }}" class="sound" type="button">{{ sound.ipa_symbol }}</button>
+                <button id="{{ sound }}" class="sound" type="button">{{ sound }}</button>
             {% endfor %}
         </p>
     {% endfor %}

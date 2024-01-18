@@ -45,7 +45,7 @@ wolf = Sound(ipa_symbol="w", keyword="WOLF")
 wood = Sound(ipa_symbol="ʊ", keyword="WOOD")
 yak = Sound(ipa_symbol="j", keyword="YAK")
 zebra = Sound(ipa_symbol="z", keyword="ZEBRA")
-extra = Sound(ipa_symbol="ɨ", keyword="GREEN") # same as i
+extra = Sound(ipa_symbol="ɨ", keyword="EUH") # same as i
 extra2 = Sound(ipa_symbol="ʌ", keyword="DUST") # same as ə
 extra3 = Sound(ipa_symbol="o", keyword="GOLD") # same as oʊ
 extra4 = Sound(ipa_symbol="ɾ", keyword="DOG") # same as d
@@ -132,7 +132,7 @@ wsheep = Word(word="sheep")
 wsnake = Word(word="snake")
 wtelevision = Word(word="television")
 wturquoise = Word(word="turquoise")
-wturtle = Word(word="turle")
+wturtle = Word(word="turtle")
 wwolf = Word(word="wolf")
 wwood = Word(word="wood")
 wyak = Word(word="yak")
