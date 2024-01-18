@@ -50,6 +50,7 @@ extra2 = Sound(ipa_symbol="ʌ", keyword="DUST") # same as ə
 extra3 = Sound(ipa_symbol="o", keyword="GOLD") # same as oʊ
 extra4 = Sound(ipa_symbol="ɾ", keyword="DOG") # same as d
 extra5 = Sound(ipa_symbol="ɯ", keyword="WOOD") # same as ʊ
+extra6 = Sound(ipa_symbol="œ", keyword="RED") # same as ɛ
 
 db.session.add(bear)
 db.session.add(beaver)
@@ -95,6 +96,7 @@ db.session.add(extra2)
 db.session.add(extra3)
 db.session.add(extra4)
 db.session.add(extra5)
+db.session.add(extra6)
 
 db.session.commit()
 

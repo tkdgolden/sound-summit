@@ -16,7 +16,7 @@ Use this template to help get you started right away! Once the proposal is compl
 |Sensitive Info | Is there any sensitive information you need to secure? | None|
 |Functionality | What functionality will your app include? | Add word lists, game quiz: drag and drop sounds/ into order, and an overall game (right or wrong answers moving you up or down a mountain)|
 |User Flow | What will the user flow look like? | Index page: choose list of words to play with, or create a word list (small at bottom for educators) Gameplay: one page per game, run via js.|
-|Stretch Goals | What features make your site more than CRUD? Do you have any stretch goals? | User login/ save state of game. Customizable avatars for gameplay.  Reverse gameplay (given audio choose word).  |
+|Stretch Goals | What features make your site more than CRUD? Do you have any stretch goals? | User login/ save state of game. Customizable avatars for gameplay. Reverse gameplay (given audio choose word). Hint button plays word audio. |
 
 # Breaking down your project
 
