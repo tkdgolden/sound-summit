@@ -78,6 +78,8 @@ class Word(db.Model):
                 else:
                     sounds.append(char)
                     prev = ""
+        if prev in VOWELS:
+            sounds.append(prev)
         return sounds
     
     def __repr__(self):

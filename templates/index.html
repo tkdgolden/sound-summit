@@ -1,8 +1,11 @@
-{% block title %}Sound Summit Explorers{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Index{% endblock %}
 {% block body %}
 <h1>Sound Summit Explorers</h1>
 <div>
-    <!-- Buttons/ option select for word list -->
+    {% for list in lists %}
+        <a href="{{ list.list_id }}"><button>{{ list.list_name }}</button></a>
+    {% endfor %}
 </div>
 <div>
     <a href="/new_wordlist">Create a new wordlist</a>
