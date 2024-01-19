@@ -19,7 +19,6 @@ $(function() {
     $(".sound").on("click", function(evt) {
         evt.preventDefault();
         var keyword = evt.currentTarget.id;
-        console.log(keyword);
         var audio = new Audio(`/static/audio/PHONEME-${keyword}.mp3`);
         audio.play();
     });
@@ -60,6 +59,24 @@ $(function() {
         })
     })
 
+    function scramble() {
+        const zones = Array.from($(".dropzone"));
+        zones.forEach(function(zone) {
+            const buttons = Array.from(zone.children);
+            const len = buttons.length;
+            buttons.forEach(function(child) {
+                zone.removeChild(child);
+            })
+            for (var i = 0; i < len; i++) {
+                const randomIndex = Math.floor(Math.random() * buttons.length);
+                console.log(buttons[randomIndex])
+                zone.appendChild(buttons[randomIndex]);
+                buttons.splice(randomIndex, 1);
+            }
+        })
+    }
+    scramble();
+
     $(".question").each(function() {
         wordsToDo.push(parseInt($(this)[0].id));
         $(this).hide();
@@ -76,7 +93,6 @@ $(function() {
         $(this).attr('id', `f${counter}`)
         $(this).addClass("incomplete");
         $(this).show();
-        console.log(this);
         counter += 1;
     })
 
