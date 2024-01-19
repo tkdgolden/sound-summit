@@ -4,12 +4,17 @@
 <h1>{{ list.list_name }}</h1>
 <div>
     {% for word in word_sounds %}
+    <div class="question" id="{{ word.word_id }}">
         <p>{{ word.word }}</p>
-        <p>
-            {% for sound in word_sounds[word] %}
-                <button id="{{ sound }}" class="sound" type="button">{{ sound }}</button>
-            {% endfor %}
-        </p>
+        <button class="evaluate" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}">submit</button>
+        <div class="answer"></div>
+        <div class="dropzone">
+        {% for sound in word_sounds[word] %}
+            <button id="{{ sound[0] }}" class="sound" data-ipa="{{ sound[1] }}" type="button" draggable="true">{{ sound[0] }}</button>
+        {% endfor %}
+        </div>
+        <button class="reset">reset</button>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

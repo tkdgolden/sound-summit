@@ -103,7 +103,7 @@ class WordModelTestCase(TestCase):
         db.session.add(sound)
 
         display = apple.__repr__()
-        self.assertEqual(display, f"<Word #{apple.word_id}: apple, [<WordSound {sound.id}: word({apple.word_id}, sound({a.ipa_symbol}), index({sound.index})>]>")
+        self.assertEqual(display, f"<Word #{apple.word_id}: apple, [<WordSound {sound.id}: word({apple.word_id}), sound({a.ipa_symbol}), index({sound.index})>]>")
 
     def test_word_get_sounds_method(self):
         """ does method correctly call API for pronunciation and return array of ipa symbols? """
@@ -165,7 +165,7 @@ class ListModelTestCase(TestCase):
         db.session.add(word)
         display = fruit.__repr__()
 
-        self.assertEqual(display, f"<List #{fruit.list_id}: fruit, 1, [<Word #{apple.word_id}: apple, [<WordSound {sound.id}: word({apple.word_id}, sound({a.ipa_symbol}), index({sound.index})>]>]>")
+        self.assertEqual(display, f"<List #{fruit.list_id}: fruit, 1, [<Word #{apple.word_id}: apple, [<WordSound {sound.id}: word({apple.word_id}), sound({a.ipa_symbol}), index({sound.index})>]>]>")
 
 
 class WordSoundModelTestCase(TestCase):

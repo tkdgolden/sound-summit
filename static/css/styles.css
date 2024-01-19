@@ -1,0 +1,15 @@
+.dropzone {
+    width: 800px;
+    height: 20px;
+    background: blueviolet;
+    margin: 10px;
+    padding: 10px;
+}
+
+.answer {
+    width: 800px;
+    height: 20px;
+    background: rgb(113, 226, 43);
+    margin: 10px;
+    padding: 10px;
+}

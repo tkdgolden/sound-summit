@@ -65,7 +65,7 @@ def gameplay(list_id):
         sound_index = []
         for sound in sounds:
             s = Sound.query.filter(Sound.ipa_symbol == sound.sound_symbol).one()
-            sound_index.append(s.keyword)
+            sound_index.append((s.keyword, s.ipa_symbol))
         word_sounds[word] = sound_index
     
     return render_template("gameplay.html", list=list, word_sounds=word_sounds)

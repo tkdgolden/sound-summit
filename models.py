@@ -149,7 +149,7 @@ class WordSound(db.Model):
     def __repr__(self):
         """ display wordsound """
 
-        return f"<WordSound {self.id}: word({self.word_id}, sound({self.sound_symbol}), index({self.index})>"
+        return f"<WordSound {self.id}: word({self.word_id}), sound({self.sound_symbol}), index({self.index})>"
 
 
 class WordList(db.Model):
