@@ -2,12 +2,15 @@ $(function() {
     var selected = null;
     var wordsToDo = [];
     const list = $("#title").data("list");
+    const difficulty = $("#title").data("difficulty");
+    const allSounds = {};
 
     function dragoverHandler(evt) {
         evt.preventDefault();
     }
 
     function dropHandler(evt) {
+        console.log(evt.target)
         if ($(evt.target).hasClass("sound")) {
             evt.target.parentElement.appendChild(selected);
         }
@@ -15,6 +18,34 @@ $(function() {
             evt.target.appendChild(selected);
         }
     }
+
+    function scramble() {
+        const zones = Array.from($(".dropzone"));
+        zones.forEach(function(zone) {
+            const buttons = Array.from(zone.children);
+            const len = buttons.length;
+            buttons.forEach(function(child) {
+                zone.removeChild(child);
+            })
+            for (var i = 0; i < len; i++) {
+                const randomIndex = Math.floor(Math.random() * buttons.length);
+                const curId = buttons[randomIndex].id;
+                if ( allSounds[curId] == null) {
+                    allSounds[curId] = $(buttons[randomIndex]).data("ipa");
+                }
+                console.log(buttons[randomIndex].id);
+                zone.appendChild(buttons[randomIndex]);
+                buttons.splice(randomIndex, 1);
+            }
+            for (var j = 0; j < difficulty; j++) {
+                console.log(Object.keys(allSounds));
+                const randomIndex = Math.floor(Math.random() * Object.keys(allSounds).length);
+                $(zone).append(`<button id='${Object.keys(allSounds)[randomIndex]}' class='sound' data-ipa='1' type='button' draggable='true'>${Object.keys(allSounds)[randomIndex]}</button>`);
+            }
+        })
+    }
+    
+    scramble();
 
     $(".sound").on("click", function(evt) {
         evt.preventDefault();
@@ -59,23 +90,7 @@ $(function() {
         })
     })
 
-    function scramble() {
-        const zones = Array.from($(".dropzone"));
-        zones.forEach(function(zone) {
-            const buttons = Array.from(zone.children);
-            const len = buttons.length;
-            buttons.forEach(function(child) {
-                zone.removeChild(child);
-            })
-            for (var i = 0; i < len; i++) {
-                const randomIndex = Math.floor(Math.random() * buttons.length);
-                console.log(buttons[randomIndex])
-                zone.appendChild(buttons[randomIndex]);
-                buttons.splice(randomIndex, 1);
-            }
-        })
-    }
-    scramble();
+
 
     $(".question").each(function() {
         wordsToDo.push(parseInt($(this)[0].id));
@@ -110,5 +125,5 @@ $(function() {
     }
 
     start();
-
+    console.log(allSounds);
 });
