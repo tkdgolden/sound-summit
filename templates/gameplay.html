@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Index{% endblock %}
+{% block title %}{{ list.list_name }}{% endblock %}
 {% block body %}
-<h1>{{ list.list_name }}</h1>
+<h1 id="title" data-list="{{ list.list_id }}">{{ list.list_name }}</h1>
+<div class="status">
+    {% for word in word_sounds %}
+        <span class="fraction">.</span>
+    {% endfor %}
+</div>
 <div>
     {% for word in word_sounds %}
     <div class="question" id="{{ word.word_id }}">

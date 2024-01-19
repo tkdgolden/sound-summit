@@ -1,7 +1,7 @@
 $(function() {
     var selected = null;
     var wordsToDo = [];
-    var wordsCompleted = [];
+    const list = $("#title").data("list");
 
     function dragoverHandler(evt) {
         evt.preventDefault();
@@ -19,6 +19,7 @@ $(function() {
     $(".sound").on("click", function(evt) {
         evt.preventDefault();
         var keyword = evt.currentTarget.id;
+        console.log(keyword);
         var audio = new Audio(`/static/audio/PHONEME-${keyword}.mp3`);
         audio.play();
     });
@@ -43,9 +44,12 @@ $(function() {
             wordsToDo.splice(index, 1);
             $(evt.target.parentElement).hide();
             start();
+            displayProgress();
         }
         else {
             alert("INCORRECT");
+            $(evt.target.parentElement).hide();
+            start();
         }
     })
 
@@ -67,5 +71,28 @@ $(function() {
         $(`#${start}`).show();
     }
 
+    var counter = 1;
+    $(".fraction").each(function() {
+        $(this).attr('id', `f${counter}`)
+        $(this).addClass("incomplete");
+        $(this).show();
+        console.log(this);
+        counter += 1;
+    })
+
+    function displayProgress() {
+        if (wordsToDo.length === 0) {
+            window.location = `/success?list_id=${list}`;
+        }
+        else {
+            const complete = counter - wordsToDo.length - 1;
+            for (var i = 1; i <= complete; i++) {
+                $(`#f${i}`).removeClass("incomplete");
+                $(`#f${i}`).addClass("done");
+            }
+        }
+    }
+
     start();
+
 });

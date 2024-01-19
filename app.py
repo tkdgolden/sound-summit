@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request
 from models import WordSound, db, connect_db, Word, Sound, List
 from form import WordListForm
 import os
@@ -69,3 +69,13 @@ def gameplay(list_id):
         word_sounds[word] = sound_index
     
     return render_template("gameplay.html", list=list, word_sounds=word_sounds)
+
+
+@app.route("/success")
+def success():
+    """ Success page """
+
+    list_id = request.args.get("list_id")
+    list = List.query.get_or_404(list_id)
+
+    return render_template("success.html", list=list)
