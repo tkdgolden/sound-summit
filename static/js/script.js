@@ -10,7 +10,6 @@ $(function() {
     }
 
     function dropHandler(evt) {
-        console.log(evt.target)
         if ($(evt.target).hasClass("sound")) {
             evt.target.parentElement.appendChild(selected);
         }
@@ -33,12 +32,10 @@ $(function() {
                 if ( allSounds[curId] == null) {
                     allSounds[curId] = $(buttons[randomIndex]).data("ipa");
                 }
-                console.log(buttons[randomIndex].id);
                 zone.appendChild(buttons[randomIndex]);
                 buttons.splice(randomIndex, 1);
             }
             for (var j = 0; j < difficulty; j++) {
-                console.log(Object.keys(allSounds));
                 const randomIndex = Math.floor(Math.random() * Object.keys(allSounds).length);
                 $(zone).append(`<button id='${Object.keys(allSounds)[randomIndex]}' class='sound' data-ipa='1' type='button' draggable='true'>${Object.keys(allSounds)[randomIndex]}</button>`);
             }
@@ -125,5 +122,4 @@ $(function() {
     }
 
     start();
-    console.log(allSounds);
 });

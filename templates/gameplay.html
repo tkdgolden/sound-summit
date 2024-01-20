@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{{ list.list_name }}{% endblock %}
 {% block body %}
-<h1 id="title" data-difficulty="{{ list.difficulty }}" data-list="{{ list.list_id }}">{{ list.list_name }} {{ list.difficulty }}</h1>
+<h1 id="title" data-difficulty="{{ list.difficulty }}" data-list="{{ list.list_id }}">{{ list.list_name }}</h1>
 <div class="status">
     {% for word in word_sounds %}
         <span class="fraction">.</span>
