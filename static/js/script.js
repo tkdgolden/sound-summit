@@ -24,14 +24,11 @@ $(function() {
             const buttons = Array.from(zone.children);
             const len = buttons.length;
             for (var i = 0; i < len; i++) {
-                console.log(buttons[i].id);
-                console.log(allSounds[buttons[i].id]);
                 if ( allSounds[buttons[i].id] == null) {
                     allSounds[buttons[i].id] = $(buttons[i]).data("ipa");
                 }
             }
         })
-        console.log("allsounds", allSounds);
         zones.forEach(function(zone) {
             const buttons = Array.from(zone.children);
             const len = buttons.length;
@@ -42,8 +39,6 @@ $(function() {
                 const randomIndex = Math.floor(Math.random() * Object.keys(allSounds).length);
                 const btn = $(`<button id='${Object.keys(allSounds)[randomIndex]}' class='sound' data-ipa='${Object.values(allSounds)[randomIndex]}' type='button' draggable='true'>${Object.keys(allSounds)[randomIndex]}</button>`);
                 buttons.push(btn[0]);
-                console.log(btn[0]);
-                console.log(buttons);
             }
             for (var i = 0; i < (len + difficulty) ; i++) {
                 const randomIndex = Math.floor(Math.random() * buttons.length);
@@ -78,7 +73,6 @@ $(function() {
             submission = submission.concat(word.dataset.ipa);
         });
         const answer = evt.target.dataset.answer;
-        console.log(submission, answer);
         if (submission == answer) {
             const index = wordsToDo.indexOf(parseInt(evt.target.parentElement.id));
             wordsToDo.splice(index, 1);
