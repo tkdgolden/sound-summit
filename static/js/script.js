@@ -24,23 +24,49 @@ $(function () {
     }
 
     /**
-     * allows drag capabilities
-     * @param {Event} evt 
-     */
-    function dragoverHandler(evt) {
-        evt.preventDefault();
+    * iterates through the given array to iterate through it's children and add each sound to global allSounds, if it didn't already exist there
+    * @param {Array} words 
+    */
+    function addToAllSounds(words) {
+        words.forEach(function (word) {
+            const options = Array.from(word.children);
+            const len = options.length;
+
+            for (var i = 0; i < len; i++) {
+                if (allSounds[options[i].id] == null) {
+                    allSounds[options[i].id] = $(options[i]).data("ipa");
+                }
+            }
+        })
     }
 
     /**
-     * drops button into submission box, even if hovering over a button that is already there
-     * @param {Event} evt 
+     * adds a number (based on global difficulty int) of HTMLElements to the given array, randomly chosen from global allSounds array
+     * @param {Array} options 
+     * @returns 
      */
-    function dropHandler(evt) {
-        if ($(evt.target).hasClass("sound")) {
-            evt.target.parentElement.appendChild(selected);
+    function addWrongOptions(options) {
+        for (var j = 0; j < difficulty; j++) {
+            const randomIndex = Math.floor(Math.random() * Object.keys(allSounds).length);
+            const btn = $(`<button id='${Object.keys(allSounds)[randomIndex]}' class='sound' data-ipa='${Object.values(allSounds)[randomIndex]}' type='button' draggable='true'>${Object.keys(allSounds)[randomIndex]}</button>`);
+            options.push(btn[0]);
         }
-        else {
-            evt.target.appendChild(selected);
+
+        return options;
+    }
+
+    /**
+     * takes given array of options and appends them to word element in a random order
+     * @param {HTMLElement} word 
+     * @param {Array} withWrongOptions 
+     */
+    function displayOptionsRandomly(word, withWrongOptions) {
+        const len = withWrongOptions.length;
+
+        for (var i = 0; i < (len); i++) {
+            const randomIndex = Math.floor(Math.random() * withWrongOptions.length);
+            word.appendChild(withWrongOptions[randomIndex]);
+            withWrongOptions.splice(randomIndex, 1);
         }
     }
 
@@ -64,53 +90,6 @@ $(function () {
     }
 
     /**
-     * takes given array of options and appends them to word element in a random order
-     * @param {HTMLElement} word 
-     * @param {Array} withWrongOptions 
-     */
-    function displayOptionsRandomly(word, withWrongOptions) {
-        const len = withWrongOptions.length;
-
-        for (var i = 0; i < (len); i++) {
-            const randomIndex = Math.floor(Math.random() * withWrongOptions.length);
-            word.appendChild(withWrongOptions[randomIndex]);
-            withWrongOptions.splice(randomIndex, 1);
-        }
-    }
-
-    /**
-     * adds a number (based on global difficulty int) of HTMLElements to the given array, randomly chosen from global allSounds array
-     * @param {Array} options 
-     * @returns 
-     */
-    function addWrongOptions(options) {
-        for (var j = 0; j < difficulty; j++) {
-            const randomIndex = Math.floor(Math.random() * Object.keys(allSounds).length);
-            const btn = $(`<button id='${Object.keys(allSounds)[randomIndex]}' class='sound' data-ipa='${Object.values(allSounds)[randomIndex]}' type='button' draggable='true'>${Object.keys(allSounds)[randomIndex]}</button>`);
-            options.push(btn[0]);
-        }
-
-        return options;
-    }
-
-    /**
-     * iterates through the given array to iterate through it's children and add each sound to global allSounds, if it didn't already exist there
-     * @param {Array} words 
-     */
-    function addToAllSounds(words) {
-        words.forEach(function (word) {
-            const options = Array.from(word.children);
-            const len = options.length;
-
-            for (var i = 0; i < len; i++) {
-                if (allSounds[options[i].id] == null) {
-                    allSounds[options[i].id] = $(options[i]).data("ipa");
-                }
-            }
-        })
-    }
-
-    /**
      * displays a new random word from the global wordsToDo array
      */
     function start() {
@@ -121,14 +100,23 @@ $(function () {
     }
 
     /**
-     * evaluates if all words have been completed, if so send to success page, if not, update progress bar
+     * allows drag capabilities
+     * @param {Event} evt 
      */
-    function checkComplete() {
-        if (wordsToDo.length === 0) {
-            window.location = `/success?list_id=${list}`;
+    function dragoverHandler(evt) {
+        evt.preventDefault();
+    }
+
+    /**
+     * drops button into submission box, even if hovering over a button that is already there
+     * @param {Event} evt 
+     */
+    function dropHandler(evt) {
+        if ($(evt.target).hasClass("sound")) {
+            evt.target.parentElement.appendChild(selected);
         }
         else {
-            displayProgress();
+            evt.target.appendChild(selected);
         }
     }
 
@@ -141,6 +129,18 @@ $(function () {
         for (var i = 1; i <= complete; i++) {
             $(`#f${i}`).removeClass("incomplete");
             $(`#f${i}`).addClass("done");
+        }
+    }
+
+    /**
+     * evaluates if all words have been completed, if so send to success page, if not, update progress bar
+     */
+    function checkComplete() {
+        if (wordsToDo.length === 0) {
+            window.location = `/success?list_id=${list}`;
+        }
+        else {
+            displayProgress();
         }
     }
 
@@ -178,31 +178,6 @@ $(function () {
     }
 
     /**
-     * check that the current submission matches that question's answer and update page for true or false possibilities
-     * @param {Event} evt 
-     */
-    function evaluateSubmission(evt) {
-        const question = evt.target.parentElement.parentElement;
-        const answerBox = evt.target.parentElement.nextElementSibling;
-        const unchosen = evt.target.parentElement.nextElementSibling.nextElementSibling;
-        const submission = gatherSubmission(answerBox);
-        const answer = evt.target.dataset.answer;
-
-        if (submission == answer) {
-            removeFromToDo(question);
-            $(question).hide();
-            start();
-            checkComplete();
-        }
-        else {
-            alert("INCORRECT");
-            putSoundsBack(unchosen);
-            $(question).hide();
-            start();
-        }
-    }
-
-    /**
      * removes the correctly answered question from the global wordsToDo array
      * @param {HTMLElement} question 
      */
@@ -226,6 +201,31 @@ $(function () {
         });
 
         return submission;
+    }
+
+    /**
+     * check that the current submission matches that question's answer and update page for true or false possibilities
+     * @param {Event} evt 
+     */
+    function evaluateSubmission(evt) {
+        const question = evt.target.parentElement.parentElement;
+        const answerBox = evt.target.parentElement.nextElementSibling;
+        const unchosen = evt.target.parentElement.nextElementSibling.nextElementSibling;
+        const submission = gatherSubmission(answerBox);
+        const answer = evt.target.dataset.answer;
+
+        if (submission == answer) {
+            removeFromToDo(question);
+            $(question).hide();
+            start();
+            checkComplete();
+        }
+        else {
+            alert("INCORRECT");
+            putSoundsBack(unchosen);
+            $(question).hide();
+            start();
+        }
     }
 
     /**
@@ -263,14 +263,14 @@ $(function () {
     $(".dropzone").on("drop", dropHandler);
     $(".answer").on("dragover", dragoverHandler);
     $(".answer").on("drop", dropHandler);
-    $(".evaluate").on("click", function(evt) {
+    $(".evaluate").on("click", function (evt) {
         evaluateSubmission(evt);
     });
     $(".test").on("click", function (evt) {
         const sounds = Array.from(evt.target.parentElement.nextElementSibling.children);
         playSelectedSounds(sounds);
     });
-    $(".reset").on("click", function(evt) {
+    $(".reset").on("click", function (evt) {
         putSoundsBack(evt.target.previousElementSibling);
     });
 });
