@@ -7,22 +7,34 @@ $(function () {
     const allSounds = {};
     var totalNumWords = 1;
 
+    /**
+     * adds a word to the global wordsToDo array
+     */
     function addToDo() {
         wordsToDo.push(parseInt($(this)[0].id));
         $(this).hide();
     }
 
+    /**
+     * counts the total number of words for global totalNumWords variable and gives progress fractions a corresponding id
+     */
     function initializeProgress() {
         $(this).attr('id', `f${totalNumWords}`)
-        $(this).addClass("incomplete");
-        $(this).show();
         totalNumWords += 1;
     }
 
+    /**
+     * allows drag capabilities
+     * @param {Event} evt 
+     */
     function dragoverHandler(evt) {
         evt.preventDefault();
     }
 
+    /**
+     * drops button into submission box, even if hovering over a button that is already there
+     * @param {Event} evt 
+     */
     function dropHandler(evt) {
         if ($(evt.target).hasClass("sound")) {
             evt.target.parentElement.appendChild(selected);
@@ -32,6 +44,9 @@ $(function () {
         }
     }
 
+    /**
+     * scrambles all of the options (with new wrong options if necessary) for all words
+     */
     function scramble() {
         const words = Array.from($(".dropzone"));
 
@@ -44,11 +59,15 @@ $(function () {
             })
 
             const withWrongOptions = addWrongOptions(options);
-            console.log(allSounds);
             displayOptionsRandomly(word, withWrongOptions);
         })
     }
 
+    /**
+     * takes given array of options and appends them to word element in a random order
+     * @param {HTMLElement} word 
+     * @param {Array} withWrongOptions 
+     */
     function displayOptionsRandomly(word, withWrongOptions) {
         const len = withWrongOptions.length;
 
@@ -59,6 +78,11 @@ $(function () {
         }
     }
 
+    /**
+     * adds a number (based on global difficulty int) of HTMLElements to the given array, randomly chosen from global allSounds array
+     * @param {Array} options 
+     * @returns 
+     */
     function addWrongOptions(options) {
         for (var j = 0; j < difficulty; j++) {
             const randomIndex = Math.floor(Math.random() * Object.keys(allSounds).length);
@@ -69,6 +93,10 @@ $(function () {
         return options;
     }
 
+    /**
+     * iterates through the given array to iterate through it's children and add each sound to global allSounds, if it didn't already exist there
+     * @param {Array} words 
+     */
     function addToAllSounds(words) {
         words.forEach(function (word) {
             const options = Array.from(word.children);
@@ -82,6 +110,9 @@ $(function () {
         })
     }
 
+    /**
+     * displays a new random word from the global wordsToDo array
+     */
     function start() {
         const startIndex = Math.floor((Math.random() * wordsToDo.length));
         const start = wordsToDo[startIndex];
@@ -89,6 +120,9 @@ $(function () {
         $(`#${start}`).show();
     }
 
+    /**
+     * evaluates if all words have been completed, if so send to success page, if not, update progress bar
+     */
     function checkComplete() {
         if (wordsToDo.length === 0) {
             window.location = `/success?list_id=${list}`;
@@ -98,6 +132,9 @@ $(function () {
         }
     }
 
+    /**
+     * evaluate the number of completed questions, and use that number to show the correct number of progress fractions as complete
+     */
     function displayProgress() {
         const complete = totalNumWords - wordsToDo.length - 1;
 
@@ -107,6 +144,10 @@ $(function () {
         }
     }
 
+    /**
+     * takes currently chosen elements and moves them to the unchosen container
+     * @param {Array} unchosen 
+     */
     function putSoundsBack(unchosen) {
         const chosen = Array.from(unchosen.previousElementSibling.children);
 
@@ -115,12 +156,16 @@ $(function () {
         })
     }
 
-    function playSelectedSounds(words) {
+    /**
+     * creates audio elements for the given sounds and play them in order
+     * @param {Array} sounds 
+     */
+    function playSelectedSounds(sounds) {
         const submission = [];
         var counter = 0;
 
-        words.forEach(function (word) {
-            var audio = new Audio(`/static/audio/PHONEME-${word.id}.mp3`);
+        sounds.forEach(function (sound) {
+            var audio = new Audio(`/static/audio/PHONEME-${sound.id}.mp3`);
             audio.addEventListener("ended", () => {
                 counter = counter + 1;
                 if (submission[counter]) {
@@ -132,6 +177,10 @@ $(function () {
         submission[counter].play();
     }
 
+    /**
+     * check that the current submission matches that question's answer and update page for true or false possibilities
+     * @param {Event} evt 
+     */
     function evaluateSubmission(evt) {
         const question = evt.target.parentElement.parentElement;
         const answerBox = evt.target.parentElement.nextElementSibling;
@@ -153,12 +202,21 @@ $(function () {
         }
     }
 
+    /**
+     * removes the correctly answered question from the global wordsToDo array
+     * @param {HTMLElement} question 
+     */
     function removeFromToDo(question) {
         const index = wordsToDo.indexOf(parseInt(question.id));
 
         wordsToDo.splice(index, 1);
     }
 
+    /**
+     * takes the given element and extracts the relevant information
+     * @param {HTMLElement} answerBox 
+     * @returns {string} the current submission as a string of ipa symbols
+     */
     function gatherSubmission(answerBox) {
         const guessSounds = Array.from(answerBox.children);
         var submission = "";
@@ -170,26 +228,34 @@ $(function () {
         return submission;
     }
 
+    /**
+     * given a sound keyword, play the corresponding audio file
+     * @param {string} keyword 
+     */
     function playSound(keyword) {
         var audio = new Audio(`/static/audio/PHONEME-${keyword}.mp3`);
 
         audio.play();
     }
 
+    // add all words to global wordsToDo array for reference
     $(".question").each(addToDo);
 
+    // get total word count, and set progress bar to 0
     $(".fraction").each(initializeProgress);
 
+    // add wrong options and randomize option order for all questions
     scramble();
 
+    // display first question at random
     start();
 
+    // event listeners:
     $(".sound").on("click", function (evt) {
         evt.preventDefault();
         var keyword = evt.currentTarget.id;
         playSound(keyword);
     });
-
     $(".sound").on("dragstart", function (evt) {
         selected = evt.currentTarget;
     });
@@ -197,16 +263,13 @@ $(function () {
     $(".dropzone").on("drop", dropHandler);
     $(".answer").on("dragover", dragoverHandler);
     $(".answer").on("drop", dropHandler);
-
     $(".evaluate").on("click", function(evt) {
         evaluateSubmission(evt);
     });
-
     $(".test").on("click", function (evt) {
-        const words = Array.from(evt.target.parentElement.nextElementSibling.children);
-        playSelectedSounds(words);
+        const sounds = Array.from(evt.target.parentElement.nextElementSibling.children);
+        playSelectedSounds(sounds);
     });
-
     $(".reset").on("click", function(evt) {
         putSoundsBack(evt.target.previousElementSibling);
     });
