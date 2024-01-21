@@ -156,4 +156,4 @@ class GameplayTestCase(TestCase):
             resp = c.get(f"/{list.list_id}")
             html = resp.get_data(as_text=True)
         
-        self.assertIn("<h1>test</h1>", html)
+        self.assertIn(f'<h1 id="title" data-difficulty="{list.difficulty}" data-list="{list.list_id}">test</h1>', html)

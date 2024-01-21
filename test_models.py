@@ -37,12 +37,25 @@ class SoundModelTestCase(TestCase):
     def test_sound_model(self):
         """ does basic model work? """
 
-        a = Sound(ipa_symbol="a")
+        a = Sound(ipa_symbol="a", keyword="TEST")
 
         db.session.add(a)
         db.session.commit()
 
         self.assertEqual(a.ipa_symbol, "a")
+        self.assertEqual(a.keyword, "TEST")
+
+    def test_sound_repr_method(self):
+        """ does sound display as expected? """
+
+        a = Sound(ipa_symbol="a", keyword="TEST")
+
+        db.session.add(a)
+        db.session.commit()
+
+        display = a.__repr__()
+
+        self.assertEqual(display, "<Sound a: TEST>")
 
 
 class WordModelTestCase(TestCase):
@@ -78,7 +91,7 @@ class WordModelTestCase(TestCase):
     def test_word_repr_method(self):
         """ does the repr look like expected? """
 
-        a = Sound(ipa_symbol="a")
+        a = Sound(ipa_symbol="a", keyword="TEST")
         apple = Word(word="apple")
 
         db.session.add(apple)
@@ -90,7 +103,7 @@ class WordModelTestCase(TestCase):
         db.session.add(sound)
 
         display = apple.__repr__()
-        self.assertEqual(display, f"<Word #{apple.word_id}: apple, [<Sound a>]>")
+        self.assertEqual(display, f"<Word #{apple.word_id}: apple, [<WordSound {sound.id}: word({apple.word_id}), sound({a.ipa_symbol}), index({sound.index})>]>")
 
     def test_word_get_sounds_method(self):
         """ does method correctly call API for pronunciation and return array of ipa symbols? """
@@ -138,11 +151,13 @@ class ListModelTestCase(TestCase):
 
         apple = Word(word="apple")
         fruit = List(list_name="fruit", difficulty=1)
-        a = Sound(ipa_symbol="a")
+        a = Sound(ipa_symbol="a", keyword="TEST")
         db.session.add(a)
         db.session.add(fruit)
         db.session.add(apple)
-        apple.sounds.append(a)
+        db.session.commit()
+        sound = WordSound(word_id=apple.word_id, sound_symbol=a.ipa_symbol, index=1)
+        db.session.add(sound)
         db.session.commit()
 
         word = WordList(word_id = apple.word_id, list_id = fruit.list_id)
@@ -150,7 +165,7 @@ class ListModelTestCase(TestCase):
         db.session.add(word)
         display = fruit.__repr__()
 
-        self.assertEqual(display, f"<List #{fruit.list_id}: fruit, 1, [<Word #{apple.word_id}: apple, [<Sound a>]>]>")
+        self.assertEqual(display, f"<List #{fruit.list_id}: fruit, 1, [<Word #{apple.word_id}: apple, [<WordSound {sound.id}: word({apple.word_id}), sound({a.ipa_symbol}), index({sound.index})>]>]>")
 
 
 class WordSoundModelTestCase(TestCase):
@@ -176,7 +191,7 @@ class WordSoundModelTestCase(TestCase):
     def test_wordsound_model(self):
         """ does basic model work? """
 
-        a = Sound(ipa_symbol="a")
+        a = Sound(ipa_symbol="a", keyword="TEST")
         apple = Word(word="apple")
 
         db.session.add(apple)
@@ -194,7 +209,7 @@ class WordSoundModelTestCase(TestCase):
     def test_wordsound_relationships(self):
         """ do word and sound connect? """
 
-        a = Sound(ipa_symbol="a")
+        a = Sound(ipa_symbol="a", keyword="TEST")
         apple = Word(word="apple")
 
         db.session.add(apple)
@@ -205,7 +220,7 @@ class WordSoundModelTestCase(TestCase):
 
         db.session.add(sound)
 
-        self.assertIn(a, apple.sounds)
+        self.assertIn(a.ipa_symbol, apple.wordsounds[0].sound_symbol)
 
 
 class WordListModelTestCase(TestCase):

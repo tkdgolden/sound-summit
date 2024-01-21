@@ -1,0 +1,28 @@
+.dropzone {
+    width: 800px;
+    height: 20px;
+    background: blueviolet;
+    margin: 10px;
+    padding: 10px;
+}
+
+.answer {
+    width: 800px;
+    height: 20px;
+    background: rgb(226, 168, 43);
+    margin: 10px;
+    padding: 10px;
+}
+
+.incomplete {
+    background: rgb(43, 162, 226);
+}
+
+.done {
+    background: rgb(43, 226, 70);
+}
+
+.fraction {
+    margin: 10px;
+    padding: 10px;
+}

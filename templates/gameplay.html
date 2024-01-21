@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
-{% block title %}Index{% endblock %}
+{% block title %}{{ list.list_name }}{% endblock %}
 {% block body %}
-<h1>{{ list.list_name }}</h1>
+<h1 id="title" data-difficulty="{{ list.difficulty }}" data-list="{{ list.list_id }}">{{ list.list_name }}</h1>
+<div class="status">
+    {% for word in word_sounds %}
+        <span class="fraction incomplete">.</span>
+    {% endfor %}
+</div>
 <div>
     {% for word in word_sounds %}
+    <div class="question" id="{{ word.word_id }}">
         <p>{{ word.word }}</p>
-        <p>
-            {% for sound in word_sounds[word] %}
-                
-                <button id="{{ sound.ipa_symbol }}" class="sound" type="button">{{ sound.ipa_symbol }}</button>
-            {% endfor %}
-        </p>
+        <span>
+            <button class="test">Test</button>
+            <button class="evaluate" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}">Submit</button>
+        </span>
+        <div class="answer"></div>
+        <div class="dropzone">
+        {% for sound in word_sounds[word] %}
+            <button id="{{ sound[0] }}" class="sound" data-ipa="{{ sound[1] }}" type="button" draggable="true">{{ sound[0] }}</button>
+        {% endfor %}
+        </div>
+        <button class="reset">Reset</button>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

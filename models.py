@@ -17,6 +17,15 @@ class Sound(db.Model):
         primary_key = True
     )
 
+    keyword = db.Column(
+        db.Text
+    )
+
+    def __repr__(self):
+        """ displays sound """
+
+        return f"<Sound {self.ipa_symbol}: {self.keyword}>"
+
 
 class Word(db.Model):
     """ words and their ids """  
@@ -32,9 +41,8 @@ class Word(db.Model):
         db.Text
     )
 
-    sounds = db.relationship(
-        'Sound',
-        secondary = "wordsounds",
+    wordsounds = db.relationship(
+        'WordSound'
     )
 
     def get_sounds(self):
@@ -80,10 +88,11 @@ class Word(db.Model):
                     prev = ""
         if prev in VOWELS:
             sounds.append(prev)
+
         return sounds
     
     def __repr__(self):
-        return f"<Word #{self.word_id}: {self.word}, {self.sounds}>"
+        return f"<Word #{self.word_id}: {self.word}, {self.wordsounds}>"
 
 
 class List(db.Model):
@@ -136,6 +145,11 @@ class WordSound(db.Model):
     index = db.Column(
         db.Integer
     )
+
+    def __repr__(self):
+        """ display wordsound """
+
+        return f"<WordSound {self.id}: word({self.word_id}), sound({self.sound_symbol}), index({self.index})>"
 
 
 class WordList(db.Model):
