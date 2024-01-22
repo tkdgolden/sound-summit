@@ -45,7 +45,7 @@ wolf = Sound(ipa_symbol="w", keyword="WOLF")
 wood = Sound(ipa_symbol="ʊ", keyword="WOOD")
 yak = Sound(ipa_symbol="j", keyword="YAK")
 zebra = Sound(ipa_symbol="z", keyword="ZEBRA")
-extra = Sound(ipa_symbol="ɨ", keyword="EUH") # same as i
+extra = Sound(ipa_symbol="ɨ", keyword="EUH") # new
 extra2 = Sound(ipa_symbol="ʌ", keyword="DUST") # same as ə
 extra3 = Sound(ipa_symbol="o", keyword="GOLD") # same as oʊ
 extra4 = Sound(ipa_symbol="ɾ", keyword="DOG") # same as d

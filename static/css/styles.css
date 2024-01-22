@@ -1,15 +1,13 @@
 .dropzone {
-    width: 800px;
-    height: 20px;
-    background: blueviolet;
+    min-height: 80px;
+    background: rgba(137, 43, 226, 0.364);
     margin: 10px;
     padding: 10px;
 }
 
 .answer {
-    width: 800px;
-    height: 20px;
-    background: rgb(226, 168, 43);
+    min-height: 80px;
+    background: rgba(226, 168, 43, 0.363);
     margin: 10px;
     padding: 10px;
 }
@@ -25,4 +23,31 @@
 .fraction {
     margin: 10px;
     padding: 10px;
+}
+
+.status {
+    margin: 30px;
+}
+
+.sound {
+    height: 50px;
+    margin: 5px;
+}
+
+.test, .evaluate, .reset {
+    margin: 5px;
+}
+
+i {
+    color: green;
+}
+
+button:hover > i {
+    color: white;
+}
+
+.educator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }

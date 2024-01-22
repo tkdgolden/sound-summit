@@ -1,39 +1,51 @@
 {% extends 'base.html' %}
 {% block title %}{{ list.list_name }}{% endblock %}
 {% block body %}
-<h1 id="title" data-difficulty="{{ list.difficulty }}" data-list="{{ list.list_id }}">{{ list.list_name }}</h1>
-<div class="container text-center">
+<h1 id="title" data-difficulty="{{ list.difficulty }}" data-list="{{ list.list_id }}" class="d-inline">{{ list.list_name }}</h1>
+<div class="status d-inline">
+    {% for word in word_sounds %}
+        <span class="fraction incomplete">.</span>
+    {% endfor %}
+</div>
+<a href="/"><button class="btn btn-outline-success"><i class="fa-solid fa-signs-post"></i></button></a>
+<hr>
+<div class="container text-center" id="intro">
     <div class="row justify-content-between">
         <div class="col-1">
             <img src="/static/images/icons/woman_hiker.png" alt="woman hiker" width="120" height="120">
         </div>
         <div class="col-11">
-            <p>Far away, a mystical mountain known as {{ list.list_name }} summit rises high above the clouds. Legend has it that at the peak of {{ list.list_name }} a treasure of uninaginable knowledge awaits those who can unravel the mysteries of phonics.</p>
+            <p>A mystical mountain known as <b>{{ list.list_name }} Summit</b> rises high above the clouds. Legend has it, that at the peak of {{ list.list_name }}, a treasure of unimaginable knowledge awaits those who can unravel the mysteries of phonics.</p>
             <p>You will embark on a challenging journey to reach the summit. To climb the mountain, you must correctly answer the questions of the magical creatures guarding their precious mountain. You may find talking trees, mischevious mountain sprites, and singing stones.</p>
         </div>
     </div>
-    <button>To the Top!</button>
+    <button class="btn btn-warning" id="begin">To the Top!</button>
 </div>
-<div class="status">
-    {% for word in word_sounds %}
-        <span class="fraction incomplete">.</span>
-    {% endfor %}
-</div>
+
+
 <div>
     {% for word in word_sounds %}
-    <div class="question" id="{{ word.word_id }}">
-        <p>{{ word.word }}</p>
-        <span>
-            <button class="test">Test</button>
-            <button class="evaluate" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}">Submit</button>
-        </span>
-        <div class="answer"></div>
-        <div class="dropzone">
-        {% for sound in word_sounds[word] %}
-            <button id="{{ sound[0] }}" class="sound" data-ipa="{{ sound[1] }}" type="button" draggable="true">{{ sound[0] }}</button>
-        {% endfor %}
+    <div class="question container" id="{{ word.word_id }}">
+        <div class="row">
+            <div class="col">
+                <p>{{ word.word }}</p>
+            </div>
         </div>
-        <button class="reset">Reset</button>
+        <div class="row justify-content-start">
+            <div class="col-9">
+                <div class="answer"></div>
+                <div class="dropzone">
+                    {% for sound in word_sounds[word] %}
+                        <button id="{{ sound[0] }}" class="sound btn btn-success d-inline-block" data-ipa="{{ sound[1] }}" type="button" draggable="true">{{ sound[0] }}</button>
+                    {% endfor %}
+                    </div>
+            </div>
+            <div class="col-3">
+                <button class="test d-block btn btn-primary">Test</button>
+                <button class="evaluate d-block btn btn-warning" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}">Submit</button>
+                <button class="reset d-block btn btn-info">Reset</button>
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>

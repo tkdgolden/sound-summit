@@ -48,7 +48,7 @@ $(function () {
     function addWrongOptions(options) {
         for (var j = 0; j < difficulty; j++) {
             const randomIndex = Math.floor(Math.random() * Object.keys(allSounds).length);
-            const btn = $(`<button id='${Object.keys(allSounds)[randomIndex]}' class='sound' data-ipa='${Object.values(allSounds)[randomIndex]}' type='button' draggable='true'>${Object.keys(allSounds)[randomIndex]}</button>`);
+            const btn = $(`<button id='${Object.keys(allSounds)[randomIndex]}' class='sound btn btn-success d-inline-block' data-ipa='${Object.values(allSounds)[randomIndex]}' type='button' draggable='true'>${Object.keys(allSounds)[randomIndex]}</button>`);
             options.push(btn[0]);
         }
 
@@ -208,9 +208,9 @@ $(function () {
      * @param {Event} evt 
      */
     function evaluateSubmission(evt) {
-        const question = evt.target.parentElement.parentElement;
-        const answerBox = evt.target.parentElement.nextElementSibling;
-        const unchosen = evt.target.parentElement.nextElementSibling.nextElementSibling;
+        const question = evt.target.parentElement.parentElement.parentElement;
+        const answerBox = evt.target.parentElement.previousElementSibling.children[0];
+        const unchosen = evt.target.parentElement.previousElementSibling.children[1];
         const submission = gatherSubmission(answerBox);
         const answer = evt.target.dataset.answer;
 
@@ -248,7 +248,10 @@ $(function () {
     scramble();
 
     // display first question at random
-    start();
+    $("#begin").on("click", function() {
+        $("#intro").hide();
+        start();
+    });
 
     // event listeners:
     $(".sound").on("click", function (evt) {
@@ -267,10 +270,10 @@ $(function () {
         evaluateSubmission(evt);
     });
     $(".test").on("click", function (evt) {
-        const sounds = Array.from(evt.target.parentElement.nextElementSibling.children);
+        const sounds = Array.from(evt.target.parentElement.previousElementSibling.children[0].children);
         playSelectedSounds(sounds);
     });
     $(".reset").on("click", function (evt) {
-        putSoundsBack(evt.target.previousElementSibling);
+        putSoundsBack(evt.target.parentElement.previousElementSibling.children[1]);
     });
 });
