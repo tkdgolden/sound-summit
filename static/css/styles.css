@@ -38,7 +38,7 @@
     margin: 5px;
 }
 
-i {
+.btn-outline-success > i {
     color: green;
 }
 
@@ -50,4 +50,8 @@ button:hover > i {
     position: absolute;
     bottom: 10px;
     right: 10px;
+}
+
+.btn-success > i {
+    color: white;
 }

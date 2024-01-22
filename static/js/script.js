@@ -48,7 +48,7 @@ $(function () {
     function addWrongOptions(options) {
         for (var j = 0; j < difficulty; j++) {
             const randomIndex = Math.floor(Math.random() * Object.keys(allSounds).length);
-            const btn = $(`<button id='${Object.keys(allSounds)[randomIndex]}' class='sound btn btn-success d-inline-block' data-ipa='${Object.values(allSounds)[randomIndex]}' type='button' draggable='true'>${Object.keys(allSounds)[randomIndex]}</button>`);
+            const btn = $(`<button id='${Object.keys(allSounds)[randomIndex]}' class='sound btn btn-success d-inline-block' data-ipa='${Object.values(allSounds)[randomIndex]}' type='button' draggable='true'><i class="fa-solid fa-${Object.keys(allSounds)[randomIndex]}"></i></button>`);
             options.push(btn[0]);
         }
 

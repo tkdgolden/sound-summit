@@ -36,7 +36,7 @@
                 <div class="answer"></div>
                 <div class="dropzone">
                     {% for sound in word_sounds[word] %}
-                        <button id="{{ sound[0] }}" class="sound btn btn-success d-inline-block" data-ipa="{{ sound[1] }}" type="button" draggable="true">{{ sound[0] }}</button>
+                        <button id="{{ sound[0] }}" class="sound btn btn-success d-inline-block" data-ipa="{{ sound[1] }}" type="button" draggable="true"><i class="fa-solid fa-{{ sound[0] }}"></i></button>
                     {% endfor %}
                     </div>
             </div>
