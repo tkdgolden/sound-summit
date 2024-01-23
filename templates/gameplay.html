@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block extrastyle %}<link rel="stylesheet" href="/static/css/gameplay.css">{% endblock %}
 {% block title %}{{ list.list_name }}{% endblock %}
 {% block body %}
 <h1 id="title" data-difficulty="{{ list.difficulty }}" data-list="{{ list.list_id }}" class="d-inline">{{ list.list_name }}</h1>
@@ -9,23 +10,22 @@
 </div>
 <a href="/"><button class="btn btn-outline-success"><i class="fa-solid fa-signs-post"></i></button></a>
 <hr>
-<div class="container text-center" id="intro">
-    <div class="row justify-content-between">
-        <div class="col-1">
-            <img src="/static/images/icons/woman_hiker.png" alt="woman hiker" width="120" height="120">
+<div class="background row">
+    <div class="space col-1"></div>
+    <div class="col text-center" id="intro">
+        <div class="row justify-content-between">
+            <div class="col-2">
+                <img src="/static/images/icons/woman_hiker.png" alt="woman hiker" width="120" height="120">
+            </div>
+            <div class="col-10">
+                <p>A mystical mountain known as <b>{{ list.list_name }} Summit</b> rises high above the clouds. Legend has it, that at the peak of {{ list.list_name }}, a treasure of unimaginable knowledge awaits those who can unravel the mysteries of phonics.</p>
+                <p>You will embark on a challenging journey to reach the summit. To climb the mountain, you must correctly answer the questions of the magical creatures guarding their precious mountain. You may find talking trees, mischevious mountain sprites, and singing stones.</p>
+            </div>
         </div>
-        <div class="col-11">
-            <p>A mystical mountain known as <b>{{ list.list_name }} Summit</b> rises high above the clouds. Legend has it, that at the peak of {{ list.list_name }}, a treasure of unimaginable knowledge awaits those who can unravel the mysteries of phonics.</p>
-            <p>You will embark on a challenging journey to reach the summit. To climb the mountain, you must correctly answer the questions of the magical creatures guarding their precious mountain. You may find talking trees, mischevious mountain sprites, and singing stones.</p>
-        </div>
+        <button class="btn btn-warning" id="begin">To the Top!</button>
     </div>
-    <button class="btn btn-warning" id="begin">To the Top!</button>
-</div>
-
-
-<div>
     {% for word in word_sounds %}
-    <div class="question container" id="{{ word.word_id }}">
+    <div class="question col" id="{{ word.word_id }}">
         <div class="row">
             <div class="col">
                 <p>{{ word.word }}</p>
