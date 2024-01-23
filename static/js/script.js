@@ -2,10 +2,25 @@ $(function () {
 
     var selected = null;
     var wordsToDo = [];
-    const list = $("#title").data("list");
     const difficulty = $("#title").data("difficulty");
     const allSounds = {};
     var totalNumWords = 1;
+    const hikerCoords = {
+        0: {top: 500, left: 325, trans: 1},
+        1: {top: 266, left: 140, trans: 1}, 
+        2: {top: 245, left: 196, trans: -1}, 
+        3: {top: 220, left: 167, trans: 1}, 
+        4: {top: 156, left: 240, trans: 1}, 
+        5: {top: 202, left: 310, trans: 1}, 
+        6: {top: 155, left: 400, trans: 1}, 
+        7: {top: 112, left: 405, trans: -1}, 
+        8: {top: 128, left: 306, trans: -1}, 
+        9: {top: 100, left: 268, trans: 1}, 
+        10: {top: 93, left: 333, trans: -1}, 
+        11: {top: 59, left: 310, trans: 1},
+        12: {top: 0, left: 325, trans: 1}};
+    const correct = [];
+    const wrong = [];
 
     /**
      * adds a word to the global wordsToDo array
@@ -19,7 +34,6 @@ $(function () {
      * counts the total number of words for global totalNumWords variable and gives progress fractions a corresponding id
      */
     function initializeProgress() {
-        $(this).attr('id', `f${totalNumWords}`)
         totalNumWords += 1;
     }
 
@@ -75,6 +89,7 @@ $(function () {
      */
     function scramble() {
         const words = Array.from($(".dropzone"));
+        $("#final").hide();
 
         addToAllSounds(words);
         words.forEach(function (word) {
@@ -95,7 +110,10 @@ $(function () {
     function start() {
         const startIndex = Math.floor((Math.random() * wordsToDo.length));
         const start = wordsToDo[startIndex];
-
+        const curr = totalNumWords - wordsToDo.length;
+        const curFlavor = $(`#p${curr}`);
+        curFlavor.show();
+        $(`#${start} .p-flavor`).append(curFlavor);
         $(`#${start}`).show();
     }
 
@@ -125,19 +143,38 @@ $(function () {
      */
     function displayProgress() {
         const complete = totalNumWords - wordsToDo.length - 1;
+        $(".flavor").hide();
+        $($(`#a${complete}`)[0]).show();
+        $(".flavor-container").show();
 
-        for (var i = 1; i <= complete; i++) {
-            $(`#f${i}`).removeClass("incomplete");
-            $(`#f${i}`).addClass("done");
-        }
+        $("#hiker").css("top", hikerCoords[complete].top);
+        $("#hiker").css("left", hikerCoords[complete].left);
+        $("#hiker").css("transform", "scaleX(" + hikerCoords[complete].trans+ ")");
+    }
+
+    function showFinal() {
+        correct.forEach(function(word) {
+            const item = document.createElement("ul");
+            item.textContent = word;
+            $("#complete").append(item);
+        })
+        wrong.forEach(function(word) {
+            const item = document.createElement("ul");
+            item.textContent = word;
+            $("#wrong").append(item);
+        })
+        $("#final").show()
     }
 
     /**
      * evaluates if all words have been completed, if so send to success page, if not, update progress bar
      */
     function checkComplete() {
-        if (wordsToDo.length === 0) {
-            window.location = `/success?list_id=${list}`;
+        const complete = totalNumWords - wordsToDo.length - 1;
+        if (complete === 12) {
+            $(".question").hide();
+            showFinal();
+            displayProgress();
         }
         else {
             displayProgress();
@@ -213,18 +250,27 @@ $(function () {
         const unchosen = evt.target.parentElement.previousElementSibling.children[1];
         const submission = gatherSubmission(answerBox);
         const answer = evt.target.dataset.answer;
-
+        const word = question.children[1].children[0].children[0].innerText;
+        const word_id = question.id;
         if (submission == answer) {
             removeFromToDo(question);
+            correct.push(word);
             $(question).hide();
-            start();
+            $(`#f${word_id}`).removeClass("incomplete");
+            $(`#f${word_id}`).removeClass("wrong");
+            $(`#f${word_id}`).addClass("done");
             checkComplete();
         }
         else {
             alert("INCORRECT");
             putSoundsBack(unchosen);
+            wrong.push(word);
+            $(`#f${word_id}`).removeClass("incomplete");
+            $(`#f${word_id}`).addClass("wrong");
             $(question).hide();
-            start();
+            $(".flavor").hide();
+            $(".wrong").show();
+            $(".flavor-container").show();
         }
     }
 
@@ -236,6 +282,23 @@ $(function () {
         var audio = new Audio(`/static/audio/PHONEME-${keyword}.mp3`);
 
         audio.play();
+    }
+
+    function nextQuestion(evt) {
+        evt.preventDefault();
+        const selected = parseInt(evt.target.alt);
+        const complete = totalNumWords - wordsToDo.length - 1;
+        if (selected <= complete) {
+            alert("completed!");
+        }
+        else if (selected === complete + 1) {
+            $("#intro").hide();
+            $(".flavor-container").hide();
+            start();
+        }
+        else {
+            alert("you're not quite there yet!");
+        }
     }
 
     // add all words to global wordsToDo array for reference
@@ -276,4 +339,7 @@ $(function () {
     $(".reset").on("click", function (evt) {
         putSoundsBack(evt.target.parentElement.previousElementSibling.children[1]);
     });
+    $("area").on("click", function (evt) {
+        nextQuestion(evt);
+    })
 });

@@ -20,6 +20,10 @@
     background: rgb(43, 226, 70);
 }
 
+.wrong {
+    background: rgb(226, 98, 43);
+}
+
 .fraction {
     margin: 10px;
     padding: 10px;
@@ -54,4 +58,27 @@ button:hover > i {
 
 .btn-success > i {
     color: white;
+}
+
+body {
+    background-color: rgb(141, 205, 224);
+}
+
+.images {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#progress {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#hiker {
+    position: absolute;
+    top: 300px;
+    left: 325px;
+    transform: scaleX(-1);
 }

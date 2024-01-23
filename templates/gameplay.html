@@ -5,13 +5,31 @@
 <h1 id="title" data-difficulty="{{ list.difficulty }}" data-list="{{ list.list_id }}" class="d-inline">{{ list.list_name }}</h1>
 <div class="status d-inline">
     {% for word in word_sounds %}
-        <span class="fraction incomplete">.</span>
+        <span class="fraction incomplete" id="f{{ word.word_id }}">.</span>
     {% endfor %}
 </div>
 <a href="/"><button class="btn btn-outline-success"><i class="fa-solid fa-signs-post"></i></button></a>
 <hr>
-<div class="background row">
-    <div class="space col-1"></div>
+<div class="row">
+    <div class="col images">
+        <img src="/static/images/backgrounds/progress.png" alt="progress" usemap="#progressmap" width="672" height="384" id="progress">
+        <img src="/static/images/icons/boy_hiker.png" id="hiker" alt="boy_hiker">
+
+        <map name="progressmap">
+            <area shape="circle" coords="146,306,12" alt="1" href=none>
+            <area shape="circle" coords="200,287,12" alt="2" href=none>
+            <area shape="circle" coords="173,265,12" alt="3" href=none>
+            <area shape="circle" coords="248,196,12" alt="4" href=none>
+            <area shape="circle" coords="318,242,12" alt="5" href=none>
+            <area shape="circle" coords="408,194,12" alt="6" href=none>
+            <area shape="circle" coords="407,152,12" alt="7" href=none>
+            <area shape="circle" coords="312,168,12" alt="8" href=none>
+            <area shape="circle" coords="275,145,12" alt="9" href=none>
+            <area shape="circle" coords="333,133,12" alt="10" href=none>
+            <area shape="circle" coords="316,99,12" alt="11" href=none>
+            <area shape="circle" coords="334,38,12" alt="12" href=none>
+        </map>
+    </div>
     <div class="col text-center" id="intro">
         <div class="row justify-content-between">
             <div class="col-2">
@@ -25,10 +43,17 @@
         <button class="btn btn-warning" id="begin">To the Top!</button>
     </div>
     {% for word in word_sounds %}
-    <div class="question col" id="{{ word.word_id }}">
+    <div class="question col" id="{{ word.word_id }}" style="display: none;">
         <div class="row">
-            <div class="col">
-                <p>{{ word.word }}</p>
+            <div class="col" id="flavorPrompt">
+                <div class="row">
+                    <div class="col-2">
+                        <img src="/static/images/icons/male_hiker.png" alt="male hiker" width="120" height="120">
+                    </div>
+                    <div class="col-10 p-flavor">
+                    </div>
+                </div>
+                <h3>{{ word.word }}</h3>
             </div>
         </div>
         <div class="row justify-content-start">
@@ -48,5 +73,105 @@
         </div>
     </div>
     {% endfor %}
+    <div class="col text-center" id="final" style="display: none;">
+        <div class="row justify-content-between">
+            <div class="col-2">
+                <img src="/static/images/icons/woman_hiker.png" alt="woman hiker" width="120" height="120">
+            </div>
+            <div class="col-10">
+                <p>
+                    With one last crash, the thunder sounds like applause. You scramble to the top of the mountain to enjoy the view! From up here, you can see just how far you've come. Awesome job!
+                </p>
+                <h3>
+                    Congratulations! You have reached the top of <b>{{ list.list_name }} Summit! </b>You have worked hard answering questions and navigating through obstacles to get here, and I am proud of you.
+                </h3>
+                <p>You got these words correct: </p>
+                <ul id="complete"></ul>
+                <p>You need some practice with these words: </p>
+                <ul id="wrong"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="col text-center flavor-container" style="display: none;">
+        <div class="row justify-content-between">
+            <div class="col-2">
+                <img src="/static/images/icons/male_hiker.png" alt="male hiker" width="120" height="120">
+            </div>
+            <div class="col-10">
+                <p id="p1" class="flavor">
+                    The trees are shaking in the wind, or maybe on their own. One falls right in front of you, almost hitting you! Answer the tree's questions for safe passage.
+                </p>
+                <p id="a1" class="flavor">
+                    Good work! As quickly as it started, the wind stops and the trees are perfectly still. You climb over the fallen tree and continue on your journey.
+                </p>
+                <p id="p2" class="flavor">
+                    There is a deep creek across the path. Answer correctly and some stones will rise up enough for you to hop across them safely.
+                </p>
+                <p id="a2" class="flavor">
+                    As you finish, you feel a rumble under the ground and several stones rise out of the water. They are flat on top and spaced perfectly for you to hop across. Nice work!
+                </p>
+                <p id="p3" class="flavor">
+                    It is steep climbing here. You are using your hands on the rocks to pull yourself up. You knock one loose and suddenly rocks are raining down the mountain toward you. Calm the rocks by answering their question. 
+                </p>
+                <p id="a3" class="flavor">
+                    That was a close one! With rocks tumbling down towards you, you answered their question. The rocks came to a stop above your head, as perfect hand-holds for you to pull yourself up on.
+                </p>
+                <p id="p4" class="flavor">
+                    There is slick snow and ice on top of the rocks. If you answer correctly, it will melt so that you don't slip right off the cliff.
+                </p>
+                <p id="a4" class="flavor">
+                    Great job! The magical snow melts away quickly at hearing your correct answer.
+                </p>
+                <p id="p5" class="flavor">
+                    The forest has grown up along the trail so that you are having to fight through vines and branches. Answer the vine's questions and it will make a path through for you. 
+                </p>
+                <p id="a5" class="flavor">
+                    The vines are impressed with your answer. You hear them creak and groan as they tighten and pull the branches out of your way.
+                </p>
+                <p id="p6" class="flavor">
+                    The trail is really muddy here. Each step your foot sinks into the ground deeper and deeper... Now you're stuck. You will have to convince the mud to let you go by answering it's question.
+                </p>
+                <p id="a6" class="flavor">
+                    The mud hardens all around you, but stays soft around your legs, so you are able to pull yourself out and dust off. Nice job!
+                </p>
+                <p id="p7" class="flavor">
+                    You come around a corner in the trail and there is a dense fog. You can't even see your hand in front of your face. If you keep walking, you might walk right off the edge of a cliff! Try talking to the fog to get it to leave.
+                </p>
+                <p id="a7" class="flavor">
+                    The fog hears your answer and begins swirling. The fog curls and spirals smaller and smaller into a cute little cloud that floats away. I think you have made a friend.
+                </p>
+                <p id="p8" class="flavor">
+                    This area of the mountain is very dry with no shade. The sun is shining bright and hot. But there is a cloud in the distance, maybe you can convince it to bring you some shade.
+                </p>
+                <p id="a8" class="flavor">
+                    Nicely done! Your cloud friend is back and moves along with you through this hot area, keeping you in a cool shadow the whole time.
+                </p>
+                <p id="p9" class="flavor">
+                    The trail leads you to a very large grassy field. From here you can't tell which way to go. You're lost! You sit down and study your map, when a squirrel runs up and steals it! Answer the squirrel's questions for your map back.
+                </p>
+                <p id="a9" class="flavor">
+                    The squirrel chatters happily after your correct answer. He brings your map back and then sits on your shoulder to ride along to the top.
+                </p>
+                <p id="p10" class="flavor">
+                    You're happily walking along, staring up through the leaves and pine needles. You dont notice yourself walk right up to a black bear guarding the path! You freeze, knowing you wouldn't be safe to run, and the bear begins to ask you a question... 
+                </p>
+                <p id="a3" class="flavor">
+                    Wow! You must have been scared talking to that bear, but she turned out to be very nice after you got that question right.
+                </p>
+                <p id="p11" class="flavor">
+                    You've been walking for a while now, all uphill, and you're getting tired. You reach to grab a good walking stick, but as you grab on, it wriggles! If you can answer the snake's question, he will let you go safely.
+                </p>
+                <p id="a11" class="flavor">
+                    "Sssssuper sssoundsss" says the snake as he slithers away.
+                </p>
+                <p id="p12" class="flavor">
+                    You're on a rocky part of the trail with no trees around. The clouds get dark and lightning strikes in front of you. Nature is protecting the treasure at the top of the mountain. Answer the question correctly and the storm will stop.
+                </p>
+                <p class="flavor wrong">
+                    Uh oh! The mountain didn't like that answer. You can try again though.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
