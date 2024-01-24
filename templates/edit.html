@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}{{ list.list_name }}{% endblock %}
+{% block body %}
+<h1 id="title" data-list="{{ list.list_id }}" class="d-inline">Edit {{ list.list_name }}</h1>
+<hr>
+<div class="row">
+    <div class="col-8 word">
+        {% for word in word_sounds %}
+            <div class="row justify-content-start">
+                <div class="col-2">
+                    <h4>{{ word.word }}</h4>
+                    <p>
+                        {% for sound in word_sounds[word] %}{{ sound[1] }} {% endfor %}
+                    </p>
+                </div>
+                <div class="col edit dropzone" data-word="{{ word.word }}">
+                    {% for sound in word_sounds[word] %}
+                        <button id="{{ sound[0] }}" class="btn btn-success d-inline-block sound" data-ipa="{{ sound[1] }}" type="button" draggable="true"><i class="fa-solid fa-{{ sound[0] }}"></i> {{ sound[1] }}</button>
+                    {% endfor %}
+                </div>
+                <div class="col-2">
+                    <button class="listen d-block btn btn-primary"><i class="fa-regular fa-circle-play"></i> Listen</button>
+                </div>
+                <div class="col-1 remove dropzone"><i class="fa-solid fa-trash-can"></i></div>
+            </div>
+        <hr>
+        {% endfor %}
+    </div>
+    <div class="col-4">
+        {% for sound in all_sounds %}
+            <button id="{{ sound.keyword }}" class="btn btn-info d-inline-block sound bank" data-ipa="{{ sound.ipa_symbol }}" type="button" draggable="true"><i class="fa-solid fa-{{ sound.keyword }}"></i> {{ sound.ipa_symbol }}</button>
+        {% endfor %}
+        <hr>
+        <p>
+            <label for="difficulty">Difficulty: </label>
+            <input type="number" id="difficulty" name="difficulty" value="{{ list.difficulty }}">
+        </p>
+        <button class="change d-block btn btn-warning"><i class="fa-regular fa-square-check"></i> Submit All Changes</button>
+    </div>
+</div>
+<form method="POST" id="edit-form" style="display: none;">
+    {{ form.hidden_tag() }}
+    {% for field in form
+        if field.widget.input_type != 'hidden' %}
+        {{ field }}
+        {% for error in field.errors %}
+            {{ error }}
+        {% endfor %}
+    {% endfor %}
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

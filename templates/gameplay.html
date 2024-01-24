@@ -57,17 +57,17 @@
         </div>
         <div class="row justify-content-start">
             <div class="col-9">
-                <div class="answer"></div>
-                <div class="dropzone">
+                <div class="answer dropzone"></div>
+                <div class="starting dropzone">
                     {% for sound in word_sounds[word] %}
                         <button id="{{ sound[0] }}" class="sound btn btn-success d-inline-block" data-ipa="{{ sound[1] }}" type="button" draggable="true"><i class="fa-solid fa-{{ sound[0] }}"></i></button>
                     {% endfor %}
-                    </div>
+                </div>
             </div>
             <div class="col-3">
-                <button class="test d-block btn btn-primary">Test</button>
-                <button class="evaluate d-block btn btn-warning" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}">Submit</button>
-                <button class="reset d-block btn btn-info">Reset</button>
+                <button class="test d-block btn btn-primary"><i class="fa-regular fa-circle-play"></i></button>
+                <button class="evaluate d-block btn btn-warning" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}"><i class="fa-regular fa-square-check"></i></button>
+                <button class="reset d-block btn btn-info"><i class="fa-solid fa-rotate-left"></i></button>
             </div>
         </div>
     </div>

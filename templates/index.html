@@ -17,7 +17,7 @@
     </div>
     <div class="container">
         {% for list in lists %}
-            <a href="{{ list.list_id }}"><button class="btn btn-outline-success"><i class="fa-solid fa-signs-post"></i> {{ list.list_name }}</button></a>
+            <a href="{{ list.list_id }}"><button class="btn btn-warning"><i class="fa-solid fa-signs-post"></i> {{ list.list_name }}</button></a>
         {% endfor %}
     </div>
 </div>
@@ -29,6 +29,6 @@
     <div class="layer layer-5" data-type="parallax" data-depth="0.1"></div>
 </div>
 <div class="educator sticky-bottom">
-    <a href="/new_wordlist">Create a new wordlist</a>
+    <a href="/educators">For Educators</a>
 </div>
 {% endblock %}

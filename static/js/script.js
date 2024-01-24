@@ -89,7 +89,7 @@ $(function () {
      * scrambles all of the options (with new wrong options if necessary) for all words
      */
     function scramble() {
-        const words = Array.from($(".dropzone"));
+        const words = Array.from($(".starting"));
 
         addToAllSounds(words);
         words.forEach(function (word) {
@@ -127,15 +127,49 @@ $(function () {
     }
 
     /**
+     * if button is from the bank, duplicate it so it stays in the bank as well
      * drops button into submission box, even if hovering over a button that is already there
      * @param {Event} evt 
      */
     function dropHandler(evt) {
-        if ($(evt.target).hasClass("sound")) {
-            evt.target.parentElement.appendChild(selected);
+        const isRemove = $(evt.target).hasClass("remove");
+        const isBank = $(selected).hasClass("bank");
+        const isOnAnotherButton = $(evt.target).hasClass("sound");
+
+        if (isRemove && isBank) {
+            selected = null;
+        }
+        else if (isRemove) {
+            evt.target.appendChild(selected);
+            evt.target.removeChild(selected);
+            selected = null;
+        }
+        else if (isBank) {
+            var duplicate = selected.cloneNode(true);
+            $(duplicate).removeClass("bank");
+            $(duplicate).on("click", function (evt) {
+                evt.preventDefault();
+                var keyword = evt.currentTarget.id;
+                playSound(keyword);
+            });
+            $(duplicate).on("dragstart", function (evt) {
+                selected = evt.currentTarget;
+            });
+            if (isOnAnotherButton) {
+                evt.target.parentElement.appendChild(duplicate);
+            }
+            else {
+                evt.target.appendChild(duplicate);
+                selected = null;
+            }
         }
         else {
-            evt.target.appendChild(selected);
+            if (isOnAnotherButton) {
+                evt.target.parentElement.appendChild(selected);
+            }
+            else {
+                evt.target.appendChild(selected);
+            }
         }
     }
 
@@ -155,6 +189,10 @@ $(function () {
         playScript("a"+ complete);
     }
 
+    /**
+     * play the audio file of the relevant piece of script
+     * @param {string} script name of the audiofile
+     */
     function playScript(script) {
         if (audio.paused == true) {
             audio.src = `/static/audio/${script}.ogg`;
@@ -163,6 +201,9 @@ $(function () {
         }
     }
 
+    /**
+     * Displays final script, renders and displays lists of correct and incorrect words
+     */
     function showFinal() {
         correct.forEach(function(word) {
             const item = document.createElement("ul");
@@ -178,7 +219,7 @@ $(function () {
     }
 
     /**
-     * evaluates if all words have been completed, if so send to success page, if not, update progress bar
+     * evaluates if all words have been completed, if so show success, if not, update progress bar
      */
     function checkComplete() {
         const complete = totalNumWords - wordsToDo.length - 1;
@@ -251,39 +292,63 @@ $(function () {
 
         return submission;
     }
+    
+    /**
+     * on a correct answer: removes the word from todo, adds word to list of correct, 
+     * hides the finished question, updates status bar, and checks if the whole list is complete
+     * @param {HTMLElement} question 
+     */
+    function rightAnswer(question) {
+        const word = question.children[1].children[0].children[0].innerText;
+        const word_id = question.id;
+
+        removeFromToDo(question);
+        correct.push(word);
+        $(question).hide();
+        $(`#f${word_id}`).removeClass("incomplete");
+        $(`#f${word_id}`).removeClass("wrong");
+        $(`#f${word_id}`).addClass("done");
+        checkComplete();
+    }
+
+    /**
+     * on a wrong answer: reset the question's sound bank, add word to wrong list, updates status bar,
+     * hides the question, displays the wrong feedback script
+     * @param {HTMLElement} question 
+     */
+    function wrongAnswer(question) {
+        const unchosen = question.children[1].children[0].children[1];
+        const word = question.children[1].children[0].children[0].innerText;
+        const word_id = question.id;
+
+        alert("INCORRECT");
+        console.log(question);
+        putSoundsBack(unchosen);
+        wrong.push(word);
+        $(`#f${word_id}`).removeClass("incomplete");
+        $(`#f${word_id}`).addClass("wrong");
+        $(question).hide();
+        $(".flavor").hide();
+        $(".wrong").show();
+        $(".flavor-container").show();
+        playScript("wrong");
+    }
 
     /**
      * check that the current submission matches that question's answer and update page for true or false possibilities
      * @param {Event} evt 
      */
-    function evaluateSubmission(evt) {
-        const question = evt.target.parentElement.parentElement.parentElement;
-        const answerBox = evt.target.parentElement.previousElementSibling.children[0];
-        const unchosen = evt.target.parentElement.previousElementSibling.children[1];
+    function evaluateSubmission(target) {
+        const question = target.parentElement.parentElement.parentElement;
+        const answerBox = target.parentElement.previousElementSibling.children[0];
         const submission = gatherSubmission(answerBox);
-        const answer = evt.target.dataset.answer;
-        const word = question.children[1].children[0].children[0].innerText;
-        const word_id = question.id;
+        const answer = target.dataset.answer;
+        console.log(question);
         if (submission == answer) {
-            removeFromToDo(question);
-            correct.push(word);
-            $(question).hide();
-            $(`#f${word_id}`).removeClass("incomplete");
-            $(`#f${word_id}`).removeClass("wrong");
-            $(`#f${word_id}`).addClass("done");
-            checkComplete();
+            rightAnswer(question);
         }
         else {
-            alert("INCORRECT");
-            putSoundsBack(unchosen);
-            wrong.push(word);
-            $(`#f${word_id}`).removeClass("incomplete");
-            $(`#f${word_id}`).addClass("wrong");
-            $(question).hide();
-            $(".flavor").hide();
-            $(".wrong").show();
-            $(".flavor-container").show();
-            playScript("wrong");
+            wrongAnswer(question);
         }
     }
 
@@ -297,6 +362,12 @@ $(function () {
         audio.play();
     }
 
+    /**
+     * Verifies that the clicked dot is the correct one in front of hiker, corresponding
+     * to the number of correctly completed questions, alert if wrong,
+     * if right: make sure intro and flavor are hidden, start a question
+     * @param {Event} evt 
+     */
     function nextQuestion(evt) {
         evt.preventDefault();
         const selected = parseInt(evt.target.alt);
@@ -314,6 +385,40 @@ $(function () {
         }
     }
 
+    /**
+     * Verifies if a question is already being displayed so that it can't be clicked while open
+     * @returns Boolean
+     */
+    function checkDisplay() {
+        const fcDisplay = $(".flavor-container").css("display") === "block"
+        const introDisplay = $("#intro").css("display") === "block"
+        if (fcDisplay || introDisplay) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    function gatherChanges() {
+        var wordsArray = [];
+        $(".edit").each(function () {
+            const submission = gatherSubmission(this);
+            wordsArray.push(submission);
+        });
+        return wordsArray;
+    }
+
+    function fillForm(changes) {
+        const form = $("#edit-form");
+        for (var i = 1; i <= 12; i++) {
+            const curInput = form[0].children[i];
+            curInput.setAttribute("value", changes[i-1]);
+        }
+        const diff = $("#difficulty")[0].value;
+        form[0].children[13].setAttribute("value", diff);
+    }
+
     // add all words to global wordsToDo array for reference
     $(".question").each(addToDo);
 
@@ -323,11 +428,11 @@ $(function () {
     // add wrong options and randomize option order for all questions
     scramble();
 
-    $(".character").on("mouseover", function() {
+    // click the characters to start the audio
+    $(".character").on("click", function() {
         playScript("game-intro");
     });
-
-    $(".once").on("mouseover", function() {
+    $(".once").on("click", function() {
         playScript("once");
     })
 
@@ -348,49 +453,70 @@ $(function () {
     });
     $(".dropzone").on("dragover", dragoverHandler);
     $(".dropzone").on("drop", dropHandler);
-    $(".answer").on("dragover", dragoverHandler);
-    $(".answer").on("drop", dropHandler);
     $(".evaluate").on("click", function (evt) {
-        evaluateSubmission(evt);
+        if ($(evt.target).hasClass("evaluate")) {
+            evaluateSubmission(evt.target);
+        }
+        else {
+            evaluateSubmission(evt.target.parentElement);
+        }
     });
     $(".test").on("click", function (evt) {
-        const sounds = Array.from(evt.target.parentElement.previousElementSibling.children[0].children);
-        playSelectedSounds(sounds);
+        if ($(evt.target).hasClass("test")) {
+            const sounds = Array.from(evt.target.parentElement.previousElementSibling.children[0].children);
+            playSelectedSounds(sounds);
+        }
+        else {
+            const sounds = Array.from(evt.target.parentElement.parentElement.previousElementSibling.children[0].children);
+            playSelectedSounds(sounds);
+        }
+    });
+    $(".listen").on("click", function (evt) {
+        if ($(evt.target).hasClass("listen")) {
+            const sounds = Array.from(evt.target.parentElement.previousElementSibling.children);
+            playSelectedSounds(sounds);
+        }
+        else {
+            const sounds = Array.from(evt.target.parentElement.parentElement.previousElementSibling.children);
+            playSelectedSounds(sounds);
+        }
     });
     $(".reset").on("click", function (evt) {
-        putSoundsBack(evt.target.parentElement.previousElementSibling.children[1]);
+        if ($(evt.target).hasClass("reset")) {
+            putSoundsBack(evt.target.parentElement.previousElementSibling.children[1]);
+        }
+        else {
+            putSoundsBack(evt.target.parentElement.parentElement.previousElementSibling.children[1]);
+        }
     });
     $("area").on("click", function (evt) {
         evt.preventDefault();
         if (checkDisplay() === true) {
             nextQuestion(evt);
         }
+    });
+    $(".change").on("click", function() {
+        const changes = gatherChanges();
+        fillForm(changes);
+        $("#edit-form").submit();
+        // window.location = `submit/${list_id}`
     })
 
-    function checkDisplay() {
-        const fcDisplay = $(".flavor-container").css("display") === "block"
-        const introDisplay = $("#intro").css("display") === "block"
-        if (fcDisplay || introDisplay) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    window.addEventListener("scroll", function(evt) {
+    // parallax scrolling
+    window.addEventListener("scroll", function() {
         const topDistance = window.scrollY;
         const layers = document.querySelectorAll("[data-type='parallax']");
-        for (var i = 0; i <= layers.length; i++) {
-            const depth = layers[i].dataset.depth;
-            const movement = -(topDistance * depth);
-            console.log(depth);
-            const translate3d = 'translate3d(0, ' + movement + 'px, 0)';
-            layers[i].style['-webkit-transform'] = translate3d;
-            layers[i].style['-moz-transform'] = translate3d;
-            layers[i].style['-ms-transform'] = translate3d;
-            layers[i].style['-o-transform'] = translate3d;
-            layers[i].style.transform = translate3d;
+        if (layers.length !== 0) {
+            for (var i = 0; i <= layers.length; i++) {
+                const depth = layers[i].dataset.depth;
+                const movement = -(topDistance * depth);
+                const translate3d = 'translate3d(0, ' + movement + 'px, 0)';
+                layers[i].style['-webkit-transform'] = translate3d;
+                layers[i].style['-moz-transform'] = translate3d;
+                layers[i].style['-ms-transform'] = translate3d;
+                layers[i].style['-o-transform'] = translate3d;
+                layers[i].style.transform = translate3d;
+            }
         }
     })
 });

@@ -1,15 +1,15 @@
 .dropzone {
     min-height: 80px;
-    background: rgba(137, 43, 226, 0.364);
     margin: 10px;
     padding: 10px;
 }
 
+.starting {
+    background: rgba(137, 43, 226, 0.364);
+}
+
 .answer {
-    min-height: 80px;
     background: rgba(226, 168, 43, 0.363);
-    margin: 10px;
-    padding: 10px;
 }
 
 .incomplete {
@@ -125,4 +125,17 @@ body {
     background-image: url('/static/images/backgrounds/palm.png');
     background-position-x: 380px;
     background-position-y: bottom;
+}
+
+.remove {
+    background-color: rgba(139, 0, 0, 0.36);
+}
+
+.edit {
+    background: rgba(226, 168, 43, 0.363);
+}
+
+.bank {
+    border: 1px, solid, black !important;
+    box-shadow: 1px 1px 2px 1px rgb(0, 0, 0);
 }

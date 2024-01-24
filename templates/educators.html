@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Educators{% endblock %}
+{% block body %}
+<div class="sticky-top">
+    <h1 id="title" class="d-inline">Educators Options</h1>
+    <a href="/"><button class="btn btn-outline-success"><i class="fa-solid fa-signs-post"></i></button></a>
+    <hr>
+</div>
+    <div>
+        <a href="/new_wordlist"><button class="btn btn-warning">New List</button></a>
+        <h4>Edit any list's pronunciation:</h4>
+        {% for list in lists %}
+            <a href="/edit/{{ list.list_id }}"><button class="btn btn-warning">{{ list.list_name }}</button></a>
+        {% endfor %}
+    </div>
+{% endblock %}
