@@ -21,6 +21,7 @@ $(function () {
         12: {top: 0, left: 325, trans: 1}};
     const correct = [];
     const wrong = [];
+    const audio = new Audio();
 
     /**
      * adds a word to the global wordsToDo array
@@ -89,7 +90,6 @@ $(function () {
      */
     function scramble() {
         const words = Array.from($(".dropzone"));
-        $("#final").hide();
 
         addToAllSounds(words);
         words.forEach(function (word) {
@@ -115,6 +115,7 @@ $(function () {
         curFlavor.show();
         $(`#${start} .p-flavor`).append(curFlavor);
         $(`#${start}`).show();
+        playScript("p" + curr);
     }
 
     /**
@@ -150,6 +151,16 @@ $(function () {
         $("#hiker").css("top", hikerCoords[complete].top);
         $("#hiker").css("left", hikerCoords[complete].left);
         $("#hiker").css("transform", "scaleX(" + hikerCoords[complete].trans+ ")");
+
+        playScript("a"+ complete);
+    }
+
+    function playScript(script) {
+        if (audio.paused == true) {
+            audio.src = `/static/audio/${script}.ogg`;
+
+            audio.play();
+        }
     }
 
     function showFinal() {
@@ -174,6 +185,7 @@ $(function () {
         if (complete === 12) {
             $(".question").hide();
             showFinal();
+            playScript("final");
             displayProgress();
         }
         else {
@@ -202,14 +214,14 @@ $(function () {
         var counter = 0;
 
         sounds.forEach(function (sound) {
-            var audio = new Audio(`/static/audio/PHONEME-${sound.id}.mp3`);
-            audio.addEventListener("ended", () => {
+            const testSound = new Audio(`/static/audio/PHONEME-${sound.id}.mp3`);
+            testSound.addEventListener("ended", () => {
                 counter = counter + 1;
                 if (submission[counter]) {
                     submission[counter].play();
                 }
             })
-            submission.push(audio);
+            submission.push(testSound);
         });
         submission[counter].play();
     }
@@ -271,6 +283,7 @@ $(function () {
             $(".flavor").hide();
             $(".wrong").show();
             $(".flavor-container").show();
+            playScript("wrong");
         }
     }
 
@@ -279,7 +292,7 @@ $(function () {
      * @param {string} keyword 
      */
     function playSound(keyword) {
-        var audio = new Audio(`/static/audio/PHONEME-${keyword}.mp3`);
+        audio.src = `/static/audio/PHONEME-${keyword}.mp3`;
 
         audio.play();
     }
@@ -309,6 +322,14 @@ $(function () {
 
     // add wrong options and randomize option order for all questions
     scramble();
+
+    $(".character").on("mouseover", function() {
+        playScript("game-intro");
+    });
+
+    $(".once").on("mouseover", function() {
+        playScript("once");
+    })
 
     // display first question at random
     $("#begin").on("click", function() {
@@ -340,6 +361,22 @@ $(function () {
         putSoundsBack(evt.target.parentElement.previousElementSibling.children[1]);
     });
     $("area").on("click", function (evt) {
-        nextQuestion(evt);
+        evt.preventDefault();
+        if (checkDisplay() === true) {
+            nextQuestion(evt);
+        }
     })
+
+    function checkDisplay() {
+        const fcDisplay = $(".flavor-container").css("display") === "block"
+        const introDisplay = $("#intro").css("display") === "block"
+        if (fcDisplay || introDisplay) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
 });
