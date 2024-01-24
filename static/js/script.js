@@ -378,5 +378,19 @@ $(function () {
         }
     }
 
-
+    window.addEventListener("scroll", function(evt) {
+        const topDistance = window.scrollY;
+        const layers = document.querySelectorAll("[data-type='parallax']");
+        for (var i = 0; i <= layers.length; i++) {
+            const depth = layers[i].dataset.depth;
+            const movement = -(topDistance * depth);
+            console.log(depth);
+            const translate3d = 'translate3d(0, ' + movement + 'px, 0)';
+            layers[i].style['-webkit-transform'] = translate3d;
+            layers[i].style['-moz-transform'] = translate3d;
+            layers[i].style['-ms-transform'] = translate3d;
+            layers[i].style['-o-transform'] = translate3d;
+            layers[i].style.transform = translate3d;
+        }
+    })
 });
