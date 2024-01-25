@@ -427,6 +427,8 @@ $(function () {
     // click the characters to start the audio
     $(".intro").on("click", function() {
         playScript("game-intro");
+        audio.play();
+        $("#begin").hide();
     });
     $(".once").on("click", function() {
         playScript("once");
