@@ -142,6 +142,8 @@ $(function () {
      * @param {Event} evt 
      */
     function dropHandler(evt) {
+        evt.preventDefault();
+        console.log(evt);
         const isRemove = $(evt.target).hasClass("remove");
         const isBank = $(selected).hasClass("bank");
         const isOnAnotherButton = $(evt.target).hasClass("sound");
@@ -429,18 +431,8 @@ $(function () {
     $(".intro").on("click", function(evt) {
         evt.preventDefault();
         playScript("game-intro");
-        // audio.type = "audio/ogg";
-        // audio.src = `/static/audio/game-intro.ogg`;
-        // $(audio).on("complete", function() {
-        //     audio.play();
-        //     $("#begin").show();
-        // })
     });
     $(".once").on("click", function() {
-        evt.preventDefault();
-        playScript("once");
-    });
-    $(".once").on("touchstart", function() {
         evt.preventDefault();
         playScript("once");
     });
@@ -455,17 +447,15 @@ $(function () {
     $(".sound").on("click", function (evt) {
         evt.preventDefault();
         var keyword = evt.currentTarget.id;
+        selected = evt.currentTarget;
         playSound(keyword);
     });
     $(".sound").on("dragstart", function (evt) {
         selected = evt.currentTarget;
     });
-    $(".sound").on("touchstart", function (evt) {
-        evt.preventDefault();
-        selected = evt.currentTarget;
-    })
     $(".dropzone").on("dragover", dragoverHandler);
     $(".dropzone").on("drop", dropHandler);
+    $(".answer").on("click", dropHandler);
     $(".evaluate").on("click", function (evt) {
         if ($(evt.target).hasClass("evaluate")) {
             evaluateSubmission(evt.target);
