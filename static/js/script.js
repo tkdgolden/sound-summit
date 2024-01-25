@@ -440,6 +440,10 @@ $(function () {
         evt.preventDefault();
         playScript("once");
     });
+    $(".once").on("touchstart", function() {
+        evt.preventDefault();
+        playScript("once");
+    });
 
     // display first question at random
     $("#begin").on("click", function() {
@@ -456,6 +460,10 @@ $(function () {
     $(".sound").on("dragstart", function (evt) {
         selected = evt.currentTarget;
     });
+    $(".sound").on("touchstart", function (evt) {
+        evt.preventDefault();
+        selected = evt.currentTarget;
+    })
     $(".dropzone").on("dragover", dragoverHandler);
     $(".dropzone").on("drop", dropHandler);
     $(".evaluate").on("click", function (evt) {
