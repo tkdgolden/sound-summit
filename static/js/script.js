@@ -109,6 +109,7 @@ $(function () {
      * @param {string} script name of the audiofile
      */
     function playScript(script) {
+        audio.type = "audio/ogg";
         audio.src = `/static/audio/${script}.ogg`;
         
         audio.play();
@@ -428,14 +429,15 @@ $(function () {
     scramble();
 
     // click the characters to start the audio
-    $(".intro").on("click", function(evt) {
-        evt.preventDefault();
+    $(".intro").on("click", function() {
         playScript("game-intro");
     });
     $(".once").on("click", function() {
-        evt.preventDefault();
         playScript("once");
     });
+    $(".play").on("click", function() {
+        playScript("once");
+    })
 
     // display first question at random
     $("#begin").on("click", function() {
