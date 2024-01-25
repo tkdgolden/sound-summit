@@ -437,6 +437,12 @@ $(function () {
     $(".once").on("click", function() {
         playScript("once");
     })
+    $(".intro").on("touch", function() {
+        playScript("game-intro");
+    });
+    $(".once").on("touch", function() {
+        playScript("once");
+    })
 
     // display first question at random
     $("#begin").on("click", function() {
