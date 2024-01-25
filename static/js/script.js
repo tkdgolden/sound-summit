@@ -428,16 +428,16 @@ $(function () {
     // click the characters to start the audio
     $(".intro").on("click", function(evt) {
         evt.preventDefault();
-        $("#begin").hide();
         playScript("game-intro");
-        audio.type = "audio/ogg";
-        audio.src = `/static/audio/game-intro.ogg`;
-        audio.on("complete", function() {
-            audio.play();
-            $("#begin").show();
-        })
+        // audio.type = "audio/ogg";
+        // audio.src = `/static/audio/game-intro.ogg`;
+        // $(audio).on("complete", function() {
+        //     audio.play();
+        //     $("#begin").show();
+        // })
     });
     $(".once").on("click", function() {
+        evt.preventDefault();
         playScript("once");
     });
 
