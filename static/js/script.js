@@ -110,8 +110,9 @@ $(function () {
      */
     function playScript(script) {
         audio.src = `/static/audio/script/${script}.ogg`;
-        
+        $("#status").text(audio.readyState);
         audio.play();
+        $("#status").text(audio.readyState);
     }
 
     /**
