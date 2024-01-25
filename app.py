@@ -86,18 +86,14 @@ def edit(list_id):
     if form.validate_on_submit():
         difficulty = form.difficulty.data
         phonetics = [form.phon1.data, form.phon2.data, form.phon3.data, form.phon4.data, form.phon5.data, form.phon6.data, form.phon7.data, form.phon8.data, form.phon9.data, form.phon10.data, form.phon11.data, form.phon12.data]
-        print(phonetics)
         list.difficulty = difficulty
         db.session.commit()
         for i in range(0, 11):
-            print(i)
-            print(words[i].word)
             WordSound.query.filter(WordSound.word_id == words[i].word_id).delete()
             wsounds = words[i].process_sounds(phonetics[i])
 
             counter = 0
             for sound in wsounds:
-                print(sound)
                 Sound.query.get_or_404(sound)
                 wsound = WordSound(word_id=words[i].word_id, sound_symbol=sound, index=counter)
                 db.session.add(wsound)

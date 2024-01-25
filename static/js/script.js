@@ -322,7 +322,6 @@ $(function () {
         const word_id = question.id;
 
         alert("INCORRECT");
-        console.log(question);
         putSoundsBack(unchosen);
         wrong.push(word);
         $(`#f${word_id}`).removeClass("incomplete");
@@ -343,7 +342,6 @@ $(function () {
         const answerBox = target.parentElement.previousElementSibling.children[0];
         const submission = gatherSubmission(answerBox);
         const answer = target.dataset.answer;
-        console.log(question);
         if (submission == answer) {
             rightAnswer(question);
         }
