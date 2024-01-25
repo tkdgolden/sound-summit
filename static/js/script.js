@@ -299,7 +299,7 @@ $(function () {
      * @param {HTMLElement} question 
      */
     function rightAnswer(question) {
-        const word = question.children[1].children[0].children[0].innerText;
+        const word = question.children[0].children[0].children[1].innerText;
         const word_id = question.id;
 
         removeFromToDo(question);
@@ -427,10 +427,16 @@ $(function () {
     scramble();
 
     // click the characters to start the audio
-    $(".character").on("click", function() {
+    $(".intro").on("click", function() {
         playScript("game-intro");
     });
     $(".once").on("click", function() {
+        playScript("once");
+    })
+    $(".intro").on("touch", function() {
+        playScript("game-intro");
+    });
+    $(".once").on("touch", function() {
         playScript("once");
     })
 
