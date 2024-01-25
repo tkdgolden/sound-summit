@@ -92,6 +92,7 @@ class Word(db.Model):
         }
 
         response = requests.request("POST", url, json=payload, headers=headers)
+        print(json.loads(response.text))
         pronunciation = json.loads(response.text)["pronunciation"]
         sounds = self.process_sounds(pronunciation)
 

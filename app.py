@@ -49,8 +49,8 @@ def new_wordlist():
                 list.words.append(w)
         db.session.add(list)
         db.session.commit()
-
-        return redirect("/")
+        
+        return redirect(f"/edit/{list.list_id}")
     
     return render_template("new_wordlist.html", form=form)
 
