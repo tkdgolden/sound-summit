@@ -109,8 +109,7 @@ $(function () {
      * @param {string} script name of the audiofile
      */
     function playScript(script) {
-        audio.type = "audio/ogg";
-        audio.src = `/static/audio/${script}.ogg`;
+        audio.src = `/static/audio/script/${script}.ogg`;
         
         audio.play();
     }
@@ -257,7 +256,7 @@ $(function () {
         var counter = 0;
 
         sounds.forEach(function (sound) {
-            const testSound = new Audio(`/static/audio/PHONEME-${sound.id}.mp3`);
+            const testSound = new Audio(`/static/audio/sound/PHONEME-${sound.id}.mp3`);
             testSound.addEventListener("ended", () => {
                 counter = counter + 1;
                 if (submission[counter]) {
@@ -266,6 +265,7 @@ $(function () {
             })
             submission.push(testSound);
         });
+        console.log(submission);
         submission[counter].play();
     }
 
@@ -357,7 +357,7 @@ $(function () {
      * @param {string} keyword 
      */
     function playSound(keyword) {
-        audio.src = `/static/audio/PHONEME-${keyword}.mp3`;
+        audio.src = `/static/audio/sound/PHONEME-${keyword}.mp3`;
 
         audio.play();
     }
@@ -429,15 +429,12 @@ $(function () {
     scramble();
 
     // click the characters to start the audio
-    $(".intro").on("click", function() {
+    $(".intro").on("click", function(evt) {
+        evt.preventDefault();
         playScript("game-intro");
     });
-    $(".once").on("click", function() {
-        console.log($("#once-audio")[0]);
-        $("#once-audio")[0].play();
-        // playScript("once");
-    });
-    $(".play").on("click", function() {
+    $(".once").on("click", function(evt) {
+        evt.preventDefault();
         playScript("once");
     })
 
