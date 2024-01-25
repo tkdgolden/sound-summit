@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Index{% endblock %}
+{% block body %}
+<div class="sticky-top">
+    <h1 id="title">Sound Summit Explorers</h1>
+    <hr>
+    <div class="container text-center" id="intro">
+        <div class="row justify-content-between">
+            <div class="col-1">
+                <img src="/static/images/icons/male_hiker.png" alt="male hiker" width="120" height="120" class="once">
+            </div>
+            <div class="col-11">
+                <p>Once upon a time, in a world far beyond our own, there existed a magical land known as Mystara. In Mystara, the extraordinary was ordinary, and the impossible was merely a challenge waiting to be conquered. At the heart of this enchanting realm stood the towering Magic Peaks—a range of mystical mountains that held the key to unlocking unimaginable powers.</p>
+                <p>You have been chosen to attempt the summits and discover the magical abilities at the top of each mountain. The path to the summit is no ordinary trail; it will be a magical journey filled with trials and lessons designed to test those who dare to climb. Each step you take, every challenge you face, and the lessons you learn will shape the magic that lies within you. </p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        {% for list in lists %}
+            <a href="{{ list.list_id }}"><button class="btn btn-warning"><i class="fa-solid fa-signs-post"></i> {{ list.list_name }}</button></a>
+        {% endfor %}
+    </div>
+</div>
+<div id="bg">
+    <div class="layer layer-1" data-type="parallax" data-depth="1"></div>
+    <div class="layer layer-2" data-type="parallax" data-depth="0.8"></div>
+    <div class="layer layer-3" data-type="parallax" data-depth="0.5"></div>
+    <div class="layer layer-4" data-type="parallax" data-depth="0.2"></div>
+    <div class="layer layer-5" data-type="parallax" data-depth="0.1"></div>
+</div>
+<div class="educator sticky-bottom">
+    <a href="/educators">For Educators</a>
+</div>
+{% endblock %}

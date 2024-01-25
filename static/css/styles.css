@@ -1,0 +1,141 @@
+.dropzone {
+    min-height: 80px;
+    margin: 10px;
+    padding: 10px;
+}
+
+.starting {
+    background: rgba(137, 43, 226, 0.364);
+}
+
+.answer {
+    background: rgba(226, 168, 43, 0.363);
+}
+
+.incomplete {
+    background: rgb(43, 162, 226);
+}
+
+.done {
+    background: rgb(43, 226, 70);
+}
+
+.wrong {
+    background: rgb(226, 98, 43);
+}
+
+.fraction {
+    margin: 10px;
+    padding: 10px;
+}
+
+.status {
+    margin: 30px;
+}
+
+.sound {
+    height: 50px;
+    margin: 5px;
+}
+
+.test, .evaluate, .reset {
+    margin: 5px;
+}
+
+.btn-outline-success > i {
+    color: green;
+}
+
+button:hover > i {
+    color: white;
+}
+
+.educator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.btn-success > i {
+    color: white;
+}
+
+body {
+    background-color: rgb(141, 205, 224) !important;
+}
+
+.images {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#progress {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+#hiker {
+    position: absolute;
+    top: 300px;
+    left: 325px;
+    transform: scaleX(-1);
+}
+
+#bg {
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+}
+
+.layer {
+    background-position: center;
+    background-size: auto;
+    background-repeat: repeat-x;
+    width: 100%;
+    height: 384px;
+    position: fixed;
+    z-index: -1;
+}
+
+.layer-1 {
+    background-image: url('/static/images/backgrounds/snow.png');
+}
+
+.layer-2 {
+    background-image: url('/static/images/backgrounds/forest.png');
+    background-position-x: 224px;
+
+}
+
+.layer-3 {
+    background-image: url('/static/images/backgrounds/desert.png');
+    background-position-x: 550px;
+
+}
+
+.layer-4 {
+    background-image: url('/static/images/backgrounds/jungle.png');
+    background-position-x: 100px;
+
+}
+
+.layer-5 {
+    background-image: url('/static/images/backgrounds/palm.png');
+    background-position-x: 380px;
+    background-position-y: bottom;
+}
+
+.remove {
+    background-color: rgba(139, 0, 0, 0.36);
+}
+
+.edit {
+    background: rgba(226, 168, 43, 0.363);
+}
+
+.bank {
+    border: 1px, solid, black !important;
+    box-shadow: 1px 1px 2px 1px rgb(0, 0, 0);
+}
