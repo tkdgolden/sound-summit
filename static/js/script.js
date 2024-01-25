@@ -205,6 +205,8 @@ $(function () {
      * Displays final script, renders and displays lists of correct and incorrect words
      */
     function showFinal() {
+        console.log(correct);
+        console.log(wrong);
         correct.forEach(function(word) {
             const item = document.createElement("ul");
             item.textContent = word;
@@ -299,8 +301,10 @@ $(function () {
      * @param {HTMLElement} question 
      */
     function rightAnswer(question) {
-        const word = question.children[1].children[0].children[0].innerText;
+        console.log(question)
+        const word = question.children[0].children[0].children[1].innerText;
         const word_id = question.id;
+        console.log(word);
 
         removeFromToDo(question);
         correct.push(word);
@@ -427,7 +431,7 @@ $(function () {
     scramble();
 
     // click the characters to start the audio
-    $(".character").on("click", function() {
+    $(".intro").on("click", function() {
         playScript("game-intro");
     });
     $(".once").on("click", function() {
