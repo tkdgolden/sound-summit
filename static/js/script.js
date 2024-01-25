@@ -194,11 +194,9 @@ $(function () {
      * @param {string} script name of the audiofile
      */
     function playScript(script) {
-        if (audio.paused == true) {
-            audio.src = `/static/audio/${script}.ogg`;
-
-            audio.play();
-        }
+        audio.src = `/static/audio/${script}.ogg`;
+        
+        audio.play();
     }
 
     /**
