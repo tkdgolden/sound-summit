@@ -427,10 +427,14 @@ $(function () {
 
     // click the characters to start the audio
     $(".intro").on("click", function() {
-        playScript("game-intro");
-        audio.src = `/static/audio/game-intro.ogg`;
-        audio.play();
         $("#begin").hide();
+        playScript("game-intro");
+        audio.type = "audio/ogg";
+        audio.src = `/static/audio/game-intro.ogg`;
+        audio.on("canplay", function() {
+            audio.play();
+            $("#begin").show();
+        })
     });
     $(".once").on("click", function() {
         playScript("once");
