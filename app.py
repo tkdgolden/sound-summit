@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request
 from models import WordSound, db, connect_db, Word, Sound, List
-from form import WordListForm
+from forms import WordListForm, EditListForm
 import os
 
 app = Flask(__name__)
@@ -30,14 +30,15 @@ def new_wordlist():
     if form.validate_on_submit():
         name = form.name.data
         difficulty = form.difficulty.data
-        words = [form.word1.data, form.word2.data, form.word3.data, form.word4.data, form.word5.data, form.word6.data, form.word7.data, form.word8.data, form.word9.data, form.word10.data, form.word11.data, form.word12.data, form.word13.data, form.word14.data, form.word15.data, form.word16.data, form.word17.data, form.word18.data, form.word19.data, form.word20.data]
+        words = [form.word1.data, form.word2.data, form.word3.data, form.word4.data, form.word5.data, form.word6.data, form.word7.data, form.word8.data, form.word9.data, form.word10.data, form.word11.data, form.word12.data]
 
         list = List(list_name=name, difficulty=difficulty)
         for word in words:
             if word:
                 w = Word(word=word)
                 db.session.add(w)
-                wsounds = w.get_sounds()
+                wpronunciation = w.get_sounds()
+                wsounds = w.process_sounds(wpronunciation)
                 counter = 0
                 for sound in wsounds:
                     Sound.query.get_or_404(sound)
@@ -48,8 +49,8 @@ def new_wordlist():
                 list.words.append(w)
         db.session.add(list)
         db.session.commit()
-
-        return redirect("/")
+        
+        return redirect(f"/edit/{list.list_id}")
     
     return render_template("new_wordlist.html", form=form)
 
@@ -70,12 +71,45 @@ def gameplay(list_id):
     
     return render_template("gameplay.html", list=list, word_sounds=word_sounds)
 
+@app.route("/educators")
+def educators():
+    lists = List.query.all()
+    
+    return render_template("educators.html", lists=lists)
 
-@app.route("/success")
-def success():
-    """ Success page """
-
-    list_id = request.args.get("list_id")
+@app.route("/edit/<int:list_id>", methods=["GET", "POST"])
+def edit(list_id):
+    form = EditListForm()
     list = List.query.get_or_404(list_id)
+    words = list.words
 
-    return render_template("success.html", list=list)
+    if form.validate_on_submit():
+        difficulty = form.difficulty.data
+        phonetics = [form.phon1.data, form.phon2.data, form.phon3.data, form.phon4.data, form.phon5.data, form.phon6.data, form.phon7.data, form.phon8.data, form.phon9.data, form.phon10.data, form.phon11.data, form.phon12.data]
+        list.difficulty = difficulty
+        db.session.commit()
+        for i in range(0, 11):
+            WordSound.query.filter(WordSound.word_id == words[i].word_id).delete()
+            wsounds = words[i].process_sounds(phonetics[i])
+
+            counter = 0
+            for sound in wsounds:
+                Sound.query.get_or_404(sound)
+                wsound = WordSound(word_id=words[i].word_id, sound_symbol=sound, index=counter)
+                db.session.add(wsound)
+                counter += 1
+            db.session.commit()
+
+        return redirect("/educators")
+
+    word_sounds = {}
+    for word in words:
+        sounds = word.wordsounds
+        sound_index = []
+        for sound in sounds:
+            s = Sound.query.filter(Sound.ipa_symbol == sound.sound_symbol).one()
+            sound_index.append((s.keyword, s.ipa_symbol))
+        word_sounds[word] = sound_index
+    all_sounds = Sound.query.all()
+    
+    return render_template("edit.html", list=list, word_sounds=word_sounds, all_sounds=all_sounds, form=form)

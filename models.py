@@ -4,7 +4,8 @@ import requests
 
 db = SQLAlchemy()
 
-VOWELS = ("u", "aʊ", "ɑ", "ə", "oʊ", "i", "eɪ", "aɪ", "ɔ", "ɪ", "ɜ", "ɛ", "æ", "ɔɪ", "ʊ", "ɨ", "ʌ", "o", "ɯ", "a", "o", "e")
+# VOWELS = ("u", "aʊ", "ɑ", "ə", "oʊ", "i", "eɪ", "aɪ", "ɔ", "ɪ", "ɜ", "ɛ", "æ", "ɔɪ", "ʊ", "ɨ", "ʌ", "o", "ɯ", "a", "o", "e")
+VOWELS = ("a", "ʊ", "e", "ɪ", "o", "ɔ")
 SPECIAL_CHARS = ("ˈ", "ˌ", ".")
 
 class Sound(db.Model):
@@ -44,24 +45,8 @@ class Word(db.Model):
     wordsounds = db.relationship(
         'WordSound'
     )
-
-    def get_sounds(self):
-        """ get an array of all the sounds that make up a word """
-
-        url = "https://api.us-south.text-to-speech.watson.cloud.ibm.com/instances/623179bf-4231-4589-8043-efdce997209b/v1/pronunciation"
-
-        payload = {
-            "text": self.word,
-            "format": "ipa"
-        }
-        headers = {
-            "Content-Type": "application/json",
-            "User-Agent": "insomnia/8.5.1",
-            "Authorization": "Basic YXBpa2V5OlhoQmVqeTJCQTEwakI1a0dTVUR2SnBfM04zUUk3ZXpTMUJ0bjRfbzlQM0RD"
-        }
-
-        response = requests.request("POST", url, json=payload, headers=headers)
-        pronunciation = json.loads(response.text)["pronunciation"]
+    
+    def process_sounds(self, pronunciation):
         sounds = []
         prev = ""
         for char in pronunciation:
@@ -90,6 +75,29 @@ class Word(db.Model):
             sounds.append(prev)
 
         return sounds
+    
+    def get_sounds(self):
+        """ get an array of all the sounds that make up a word """
+
+        url = "https://api.us-south.text-to-speech.watson.cloud.ibm.com/instances/623179bf-4231-4589-8043-efdce997209b/v1/pronunciation"
+
+        payload = {
+            "text": self.word,
+            "format": "ipa"
+        }
+        headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "insomnia/8.5.1",
+            "Authorization": "Basic YXBpa2V5OlhoQmVqeTJCQTEwakI1a0dTVUR2SnBfM04zUUk3ZXpTMUJ0bjRfbzlQM0RD"
+        }
+
+        response = requests.request("POST", url, json=payload, headers=headers)
+        print(json.loads(response.text))
+        pronunciation = json.loads(response.text)["pronunciation"]
+        sounds = self.process_sounds(pronunciation)
+
+        return sounds
+
     
     def __repr__(self):
         return f"<Word #{self.word_id}: {self.word}, {self.wordsounds}>"
