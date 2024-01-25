@@ -103,6 +103,16 @@ $(function () {
             displayOptionsRandomly(word, withWrongOptions);
         })
     }
+    
+    /**
+     * play the audio file of the relevant piece of script
+     * @param {string} script name of the audiofile
+     */
+    function playScript(script) {
+        audio.src = `/static/audio/${script}.ogg`;
+        
+        audio.play();
+    }
 
     /**
      * displays a new random word from the global wordsToDo array
@@ -189,15 +199,6 @@ $(function () {
         playScript("a"+ complete);
     }
 
-    /**
-     * play the audio file of the relevant piece of script
-     * @param {string} script name of the audiofile
-     */
-    function playScript(script) {
-        audio.src = `/static/audio/${script}.ogg`;
-        
-        audio.play();
-    }
 
     /**
      * Displays final script, renders and displays lists of correct and incorrect words
@@ -427,6 +428,7 @@ $(function () {
     // click the characters to start the audio
     $(".intro").on("click", function() {
         playScript("game-intro");
+        audio.src = `/static/audio/game-intro.ogg`;
         audio.play();
         $("#begin").hide();
     });
