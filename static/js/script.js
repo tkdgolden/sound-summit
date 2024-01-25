@@ -426,7 +426,8 @@ $(function () {
     scramble();
 
     // click the characters to start the audio
-    $(".intro").on("click", function() {
+    $(".intro").on("click", function(evt) {
+        evt.preventDefault();
         $("#begin").hide();
         playScript("game-intro");
         audio.type = "audio/ogg";
