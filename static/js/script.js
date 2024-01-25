@@ -433,7 +433,9 @@ $(function () {
         playScript("game-intro");
     });
     $(".once").on("click", function() {
-        playScript("once");
+        console.log($("#once-audio")[0]);
+        $("#once-audio")[0].play();
+        // playScript("once");
     });
     $(".play").on("click", function() {
         playScript("once");
