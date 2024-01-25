@@ -205,8 +205,6 @@ $(function () {
      * Displays final script, renders and displays lists of correct and incorrect words
      */
     function showFinal() {
-        console.log(correct);
-        console.log(wrong);
         correct.forEach(function(word) {
             const item = document.createElement("ul");
             item.textContent = word;
@@ -301,10 +299,8 @@ $(function () {
      * @param {HTMLElement} question 
      */
     function rightAnswer(question) {
-        console.log(question)
         const word = question.children[0].children[0].children[1].innerText;
         const word_id = question.id;
-        console.log(word);
 
         removeFromToDo(question);
         correct.push(word);
