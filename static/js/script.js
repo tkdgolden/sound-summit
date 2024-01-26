@@ -109,10 +109,41 @@ $(function () {
      * @param {string} script name of the audiofile
      */
     function playScript(script) {
-        audio.src = `/static/audio/script/${script}.m4a`;
-        $("#status").text(audio.readyState);
+        audio.src = `/static/audio/script/${script}.wav`;
         audio.play();
-        $("#status").text(audio.readyState);
+        // $(audio).on("canplay", function () {
+        //     console.log("ready");
+        // });
+    }
+
+    function playLongScript(script1, script2, script3, script4) {
+        audio.src = `/static/audio/script/${script1}.m4a`;
+        const secondAudio = new Audio();
+        const thirdAudio = new Audio();
+        const fourthAudio = new Audio();
+        audio.play();
+        $(audio).on("ended", function () {
+            secondAudio.play();
+        });
+        $(audio).on("canplay", function () {
+            console.log("HERE1");
+            secondAudio.src = `/static/audio/script/${script2}.m4a`;
+        });
+        $(secondAudio).on("ended", function () {
+            thirdAudio.play();
+        });
+        $(secondAudio).on("canplay", function () {
+            console.log("HERE2");
+            thirdAudio.src = `/static/audio/script/${script3}.m4a`;
+        });
+        $(thirdAudio).on("ended", function () {
+            fourthAudio.play();
+        });
+        $(thirdAudio).on("canplay", function () {
+            console.log("HERE3");
+            fourthAudio.src = `/static/audio/script/${script4}.m4a`;
+        });
+
     }
 
     /**
@@ -443,7 +474,7 @@ $(function () {
     $(".once").on("click", function(evt) {
         evt.preventDefault();
         playScript("once");
-    })
+    });
 
     // display first question at random
     $("#begin").on("click", function() {
@@ -510,7 +541,6 @@ $(function () {
         const changes = gatherChanges();
         fillForm(changes);
         $("#edit-form").submit();
-        // window.location = `submit/${list_id}`
     })
 
     // parallax scrolling
@@ -519,7 +549,7 @@ $(function () {
         const layers = document.querySelectorAll("[data-type='parallax']");
         if (layers.length !== 0) {
             for (var i = 0; i <= layers.length; i++) {
-                const depth = layers[i].dataset.depth;
+                const depth = $(layers[i]).data("depth");
                 const movement = -(topDistance * depth);
                 const translate3d = 'translate3d(0, ' + movement + 'px, 0)';
                 layers[i].style['-webkit-transform'] = translate3d;
