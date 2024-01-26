@@ -348,7 +348,7 @@ $(function () {
      */
     function evaluateSubmission(target) {
         const question = target.parentElement.parentElement.parentElement;
-        const answerBox = target.parentElement.previousElementSibling.children[0];
+        const answerBox = target.parentElement.children[0];
         const submission = gatherSubmission(answerBox);
         const answer = target.dataset.answer;
         if (submission == answer) {
@@ -474,11 +474,11 @@ $(function () {
     });
     $(".test").on("click", function (evt) {
         if ($(evt.target).hasClass("test")) {
-            const sounds = Array.from(evt.target.parentElement.previousElementSibling.children[0].children);
+            const sounds = Array.from(evt.target.parentElement.children[0].children);
             playSelectedSounds(sounds);
         }
         else {
-            const sounds = Array.from(evt.target.parentElement.parentElement.previousElementSibling.children[0].children);
+            const sounds = Array.from(evt.target.parentElement.parentElement.children[0].children);
             playSelectedSounds(sounds);
         }
     });
@@ -494,10 +494,10 @@ $(function () {
     });
     $(".reset").on("click", function (evt) {
         if ($(evt.target).hasClass("reset")) {
-            putSoundsBack(evt.target.parentElement.previousElementSibling.children[1]);
+            putSoundsBack(evt.target.parentElement.children[1]);
         }
         else {
-            putSoundsBack(evt.target.parentElement.parentElement.previousElementSibling.children[1]);
+            putSoundsBack(evt.target.parentElement.parentElement.children[1]);
         }
     });
     $("area").on("click", function (evt) {

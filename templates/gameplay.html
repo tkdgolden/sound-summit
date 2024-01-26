@@ -46,18 +46,16 @@
             </div>
         </div>
         <div class="row justify-content-start">
-            <div class="col-9">
+            <div class="col">
                 <div class="answer dropzone"></div>
                 <div class="starting dropzone">
                     {% for sound in word_sounds[word] %}
                         <button id="{{ sound[0] }}" class="sound btn btn-success d-inline-block" data-ipa="{{ sound[1] }}" type="button" draggable="true"><i class="fa-solid fa-{{ sound[0] }}"></i></button>
                     {% endfor %}
                 </div>
-            </div>
-            <div class="col-3">
-                <button class="test d-block btn btn-primary"><i class="fa-regular fa-circle-play"></i></button>
-                <button class="evaluate d-block btn btn-warning" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}"><i class="fa-regular fa-square-check"></i></button>
-                <button class="reset d-block btn btn-info"><i class="fa-solid fa-rotate-left"></i></button>
+                <button class="test btn btn-primary d-inline-block"><i class="fa-regular fa-circle-play"></i></button>
+                <button class="evaluate btn btn-warning d-inline-block" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}"><i class="fa-regular fa-square-check"></i></button>
+                <button class="reset btn btn-info d-inline-block"><i class="fa-solid fa-rotate-left"></i></button>
             </div>
         </div>
     </div>
@@ -83,7 +81,6 @@
                 <img src="/static/images/icons/male_hiker.png" alt="male hiker" width="120" height="120" class="character">
                 <p id="p1" class="flavor">
                     The trees are shaking in the wind, or maybe on their own. One falls right in front of you, almost hitting you! Answer the tree's questions for safe passage.
-                    <i class="fa-solid fa-volume-high play"></i>
                 </p>
                 <p id="a1" class="flavor">
                     Good work! As quickly as it started, the wind stops and the trees are perfectly still. You climb over the fallen tree and continue on your journey.
