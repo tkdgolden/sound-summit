@@ -144,7 +144,6 @@ $(function () {
      */
     function dropHandler(evt) {
         evt.preventDefault();
-        console.log(evt);
         const isRemove = $(evt.target).hasClass("remove");
         const isBank = $(selected).hasClass("bank");
         const isOnAnotherButton = $(evt.target).hasClass("sound");
@@ -195,8 +194,16 @@ $(function () {
         $($(`#a${complete}`)[0]).show();
         $(".flavor-container").show();
 
+        const width = $("#progress").width();
+
+        const container = $("#progress").parent().width();
+        var diff = 0;
+        if (container > width) {
+            diff = (container - width) / 2;
+        }
+
         $("#hiker").css("top", hikerCoords[complete].top);
-        $("#hiker").css("left", hikerCoords[complete].left);
+        $("#hiker").css("left", hikerCoords[complete].left + diff);
         $("#hiker").css("transform", "scaleX(" + hikerCoords[complete].trans+ ")");
 
         playScript("a"+ complete);
@@ -266,7 +273,6 @@ $(function () {
             })
             submission.push(testSound);
         });
-        console.log(submission);
         submission[counter].play();
     }
 
