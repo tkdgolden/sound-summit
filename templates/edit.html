@@ -5,7 +5,19 @@
 <a href="/"><button class="btn btn-outline-success"><i class="fa-solid fa-signs-post"></i></button></a>
 <hr>
 <div class="row">
-    <div class="col-8 word">
+    <div class="col-3 wordbank">
+        {% for sound in all_sounds %}
+            <button id="{{ sound.keyword }}" class="btn btn-info d-inline-block sound bank" data-ipa="{{ sound.ipa_symbol }}" type="button" draggable="true"><i class="fa-solid fa-{{ sound.keyword }}"></i> {{ sound.ipa_symbol }}</button>
+        {% endfor %}
+        <hr>
+        <p>
+            <label for="difficulty">Difficulty: </label>
+            <input type="number" id="difficulty" name="difficulty" value="{{ list.difficulty }}">
+        </p>
+        <button class="change d-block btn btn-warning"><i class="fa-regular fa-square-check"></i> Submit All Changes</button>
+    </div>
+    <div class="col-3"></div>
+    <div class="col-9 word">
         {% for word in word_sounds %}
             <div class="row justify-content-start">
                 <div class="col-2">
@@ -26,17 +38,6 @@
             </div>
         <hr>
         {% endfor %}
-    </div>
-    <div class="col-4">
-        {% for sound in all_sounds %}
-            <button id="{{ sound.keyword }}" class="btn btn-info d-inline-block sound bank" data-ipa="{{ sound.ipa_symbol }}" type="button" draggable="true"><i class="fa-solid fa-{{ sound.keyword }}"></i> {{ sound.ipa_symbol }}</button>
-        {% endfor %}
-        <hr>
-        <p>
-            <label for="difficulty">Difficulty: </label>
-            <input type="number" id="difficulty" name="difficulty" value="{{ list.difficulty }}">
-        </p>
-        <button class="change d-block btn btn-warning"><i class="fa-regular fa-square-check"></i> Submit All Changes</button>
     </div>
 </div>
 <form method="POST" id="edit-form" style="display: none;">

@@ -143,3 +143,11 @@ body {
 .character {
     float: left;
 }
+
+.wordbank {
+    position: fixed;
+}
+
+.word {
+    float: right;
+}
