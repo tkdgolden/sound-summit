@@ -4,8 +4,6 @@ https://americanipachart.com/
 
 # Icons:
 ### icons8
-male hiker
- <a target="_blank" href="https://icons8.com/icon/o3SeKH4zVLST/adventure">Adventure</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
  female hiker
  <a target="_blank" href="https://icons8.com/icon/Pmgoah8hMZNi/adventure">Adventure</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
  boy hiker

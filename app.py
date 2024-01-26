@@ -10,6 +10,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgre
 
 app.config['SECRET_KEY'] = "I'LL NEVER TELL!!"
 
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True, "pool_recycle": 600}
+
 connect_db(app)
 db.create_all()
 

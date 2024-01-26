@@ -10,7 +10,7 @@
 <a href="/"><button class="btn btn-outline-success"><i class="fa-solid fa-signs-post"></i></button></a>
 <hr>
 <div class="row">
-    <div class="col images">
+    <div class="col images text-center">
         <img src="/static/images/backgrounds/progress.png" alt="progress" usemap="#progressmap" width="672" height="384" id="progress">
         <img src="/static/images/icons/boy_hiker.png" id="hiker" alt="boy_hiker">
 
@@ -28,75 +28,57 @@
             <area shape="circle" coords="316,99,12" alt="11" href=none>
             <area shape="circle" coords="334,38,12" alt="12" href=none>
         </map>
+        <h4>Click a red dot to move forward.</h4>
     </div>
     <div class="col text-center" id="intro">
-        <div class="row justify-content-between">
-            <div class="col-2">
-                <img class="character" src="/static/images/icons/woman_hiker.png" alt="woman hiker" width="120" height="120">
-            </div>
-            <div class="col-10">
-                <p>A mystical mountain known as <b>{{ list.list_name }} Summit</b> rises high above the clouds. Legend has it, that at the peak of {{ list.list_name }}, a treasure of unimaginable knowledge awaits those who can unravel the mysteries of phonics.</p>
-                <p>You will embark on a challenging journey to reach the summit. To climb the mountain, you must correctly answer the questions of the magical creatures guarding their precious mountain. You may find talking trees, mischevious mountain sprites, and singing stones.</p>
-            </div>
-        </div>
+        <p><img class="character intro" src="/static/images/icons/woman_hiker.png" type="button" alt="woman hiker" width="120" height="120">A mystical mountain known as <b>{{ list.list_name }} Summit</b> rises high above the clouds. Legend has it, that at the peak of {{ list.list_name }}, a treasure of unimaginable knowledge awaits those who can unravel the mysteries of phonics.</p>
+        <p>You will embark on a challenging journey to reach the summit. To climb the mountain, you must correctly answer the questions of the magical creatures guarding their precious mountain. You may find talking trees, mischevious mountain sprites, and singing stones.</p>
         <button class="btn btn-warning" id="begin">To the Top!</button>
     </div>
     {% for word in word_sounds %}
     <div class="question col" id="{{ word.word_id }}" style="display: none;">
         <div class="row">
             <div class="col" id="flavorPrompt">
-                <div class="row">
-                    <div class="col-2">
-                        <img src="/static/images/icons/male_hiker.png" alt="male hiker" width="120" height="120">
-                    </div>
-                    <div class="col-10 p-flavor">
-                    </div>
-                </div>
+                <p class="p-flavor">
+                    <img src="/static/images/icons/woman_hiker.png" alt="male hiker" width="120" height="120" class="character">
+                </p>
                 <h3>{{ word.word }}</h3>
             </div>
         </div>
         <div class="row justify-content-start">
-            <div class="col-9">
+            <div class="col">
                 <div class="answer dropzone"></div>
                 <div class="starting dropzone">
                     {% for sound in word_sounds[word] %}
                         <button id="{{ sound[0] }}" class="sound btn btn-success d-inline-block" data-ipa="{{ sound[1] }}" type="button" draggable="true"><i class="fa-solid fa-{{ sound[0] }}"></i></button>
                     {% endfor %}
                 </div>
-            </div>
-            <div class="col-3">
-                <button class="test d-block btn btn-primary"><i class="fa-regular fa-circle-play"></i></button>
-                <button class="evaluate d-block btn btn-warning" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}"><i class="fa-regular fa-square-check"></i></button>
-                <button class="reset d-block btn btn-info"><i class="fa-solid fa-rotate-left"></i></button>
+                <button class="test btn btn-primary d-inline-block"><i class="fa-regular fa-circle-play"></i></button>
+                <button class="evaluate btn btn-warning d-inline-block" data-answer="{% for sound in word.wordsounds %}{{ sound.sound_symbol }}{% endfor %}"><i class="fa-regular fa-square-check"></i></button>
+                <button class="reset btn btn-info d-inline-block"><i class="fa-solid fa-rotate-left"></i></button>
             </div>
         </div>
     </div>
     {% endfor %}
     <div class="col text-center" id="final" style="display: none;">
         <div class="row justify-content-between">
-            <div class="col-2">
-                <img src="/static/images/icons/woman_hiker.png" alt="woman hiker" width="120" height="120">
-            </div>
-            <div class="col-10">
-                <p>
-                    With one last crash, the thunder sounds like applause. You scramble to the top of the mountain to enjoy the view! From up here, you can see just how far you've come. Awesome job!
-                </p>
-                <h3>
-                    Congratulations! You have reached the top of <b>{{ list.list_name }} Summit! </b>You have worked hard answering questions and navigating through obstacles to get here, and I am proud of you.
-                </h3>
-                <p>You got these words correct: </p>
-                <ul id="complete"></ul>
-                <p>You need some practice with these words: </p>
-                <ul id="wrong"></ul>
-            </div>
+            <p>
+                <img src="/static/images/icons/woman_hiker.png" alt="woman hiker" width="120" height="120" class="character">
+                With one last crash, the thunder sounds like applause. You scramble to the top of the mountain to enjoy the view! From up here, you can see just how far you've come. Awesome job!
+            </p>
+            <h3>
+                Congratulations! You have reached the top of <b>{{ list.list_name }} Summit! </b>You have worked hard answering questions and navigating through obstacles to get here, and I am proud of you.
+            </h3>
+            <p>You got these words correct: </p>
+            <ul id="complete"></ul>
+            <p>You need some practice with these words: </p>
+            <ul id="wrong"></ul>
         </div>
     </div>
     <div class="col text-center flavor-container" style="display: none;">
         <div class="row justify-content-between">
-            <div class="col-2">
-                <img src="/static/images/icons/male_hiker.png" alt="male hiker" width="120" height="120">
-            </div>
-            <div class="col-10">
+            <span>
+                <img src="/static/images/icons/woman_hiker.png" alt="male hiker" width="120" height="120" class="character">
                 <p id="p1" class="flavor">
                     The trees are shaking in the wind, or maybe on their own. One falls right in front of you, almost hitting you! Answer the tree's questions for safe passage.
                 </p>
@@ -169,11 +151,8 @@
                 <p class="flavor wrong">
                     Uh oh! The mountain didn't like that answer. You can try again though.
                 </p>
-            </div>
+            </span>
         </div>
     </div>
-</div>
-<div class="row text-center">
-    <h4>Click a red dot to move forward.</h4>
 </div>
 {% endblock %}
