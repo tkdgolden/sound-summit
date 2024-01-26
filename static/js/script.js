@@ -103,6 +103,48 @@ $(function () {
             displayOptionsRandomly(word, withWrongOptions);
         })
     }
+    
+    /**
+     * play the audio file of the relevant piece of script
+     * @param {string} script name of the audiofile
+     */
+    function playScript(script) {
+        audio.src = `/static/audio/script/${script}.wav`;
+        audio.play();
+        // $(audio).on("canplay", function () {
+        //     console.log("ready");
+        // });
+    }
+
+    function playLongScript(script1, script2, script3, script4) {
+        audio.src = `/static/audio/script/${script1}.m4a`;
+        const secondAudio = new Audio();
+        const thirdAudio = new Audio();
+        const fourthAudio = new Audio();
+        audio.play();
+        $(audio).on("ended", function () {
+            secondAudio.play();
+        });
+        $(audio).on("canplay", function () {
+            console.log("HERE1");
+            secondAudio.src = `/static/audio/script/${script2}.m4a`;
+        });
+        $(secondAudio).on("ended", function () {
+            thirdAudio.play();
+        });
+        $(secondAudio).on("canplay", function () {
+            console.log("HERE2");
+            thirdAudio.src = `/static/audio/script/${script3}.m4a`;
+        });
+        $(thirdAudio).on("ended", function () {
+            fourthAudio.play();
+        });
+        $(thirdAudio).on("canplay", function () {
+            console.log("HERE3");
+            fourthAudio.src = `/static/audio/script/${script4}.m4a`;
+        });
+
+    }
 
     /**
      * displays a new random word from the global wordsToDo array
@@ -132,6 +174,7 @@ $(function () {
      * @param {Event} evt 
      */
     function dropHandler(evt) {
+        evt.preventDefault();
         const isRemove = $(evt.target).hasClass("remove");
         const isBank = $(selected).hasClass("bank");
         const isOnAnotherButton = $(evt.target).hasClass("sound");
@@ -182,22 +225,21 @@ $(function () {
         $($(`#a${complete}`)[0]).show();
         $(".flavor-container").show();
 
+        const width = $("#progress").width();
+
+        const container = $("#progress").parent().width();
+        var diff = 0;
+        if (container > width) {
+            diff = (container - width) / 2;
+        }
+
         $("#hiker").css("top", hikerCoords[complete].top);
-        $("#hiker").css("left", hikerCoords[complete].left);
+        $("#hiker").css("left", hikerCoords[complete].left + diff);
         $("#hiker").css("transform", "scaleX(" + hikerCoords[complete].trans+ ")");
 
         playScript("a"+ complete);
     }
 
-    /**
-     * play the audio file of the relevant piece of script
-     * @param {string} script name of the audiofile
-     */
-    function playScript(script) {
-        audio.src = `/static/audio/${script}.ogg`;
-        
-        audio.play();
-    }
 
     /**
      * Displays final script, renders and displays lists of correct and incorrect words
@@ -253,7 +295,7 @@ $(function () {
         var counter = 0;
 
         sounds.forEach(function (sound) {
-            const testSound = new Audio(`/static/audio/PHONEME-${sound.id}.mp3`);
+            const testSound = new Audio(`/static/audio/sound/PHONEME-${sound.id}.mp3`);
             testSound.addEventListener("ended", () => {
                 counter = counter + 1;
                 if (submission[counter]) {
@@ -337,7 +379,7 @@ $(function () {
      */
     function evaluateSubmission(target) {
         const question = target.parentElement.parentElement.parentElement;
-        const answerBox = target.parentElement.previousElementSibling.children[0];
+        const answerBox = target.parentElement.children[0];
         const submission = gatherSubmission(answerBox);
         const answer = target.dataset.answer;
         if (submission == answer) {
@@ -353,7 +395,7 @@ $(function () {
      * @param {string} keyword 
      */
     function playSound(keyword) {
-        audio.src = `/static/audio/PHONEME-${keyword}.mp3`;
+        audio.src = `/static/audio/sound/PHONEME-${keyword}.mp3`;
 
         audio.play();
     }
@@ -425,10 +467,12 @@ $(function () {
     scramble();
 
     // click the characters to start the audio
-    $(".intro").on("click", function() {
+    $(".intro").on("click", function(evt) {
+        evt.preventDefault();
         playScript("game-intro");
     });
-    $(".once").on("click", function() {
+    $(".once").on("click", function(evt) {
+        evt.preventDefault();
         playScript("once");
     });
 
@@ -442,6 +486,7 @@ $(function () {
     $(".sound").on("click", function (evt) {
         evt.preventDefault();
         var keyword = evt.currentTarget.id;
+        selected = evt.currentTarget;
         playSound(keyword);
     });
     $(".sound").on("dragstart", function (evt) {
@@ -449,6 +494,7 @@ $(function () {
     });
     $(".dropzone").on("dragover", dragoverHandler);
     $(".dropzone").on("drop", dropHandler);
+    $(".answer").on("click", dropHandler);
     $(".evaluate").on("click", function (evt) {
         if ($(evt.target).hasClass("evaluate")) {
             evaluateSubmission(evt.target);
@@ -459,11 +505,11 @@ $(function () {
     });
     $(".test").on("click", function (evt) {
         if ($(evt.target).hasClass("test")) {
-            const sounds = Array.from(evt.target.parentElement.previousElementSibling.children[0].children);
+            const sounds = Array.from(evt.target.parentElement.children[0].children);
             playSelectedSounds(sounds);
         }
         else {
-            const sounds = Array.from(evt.target.parentElement.parentElement.previousElementSibling.children[0].children);
+            const sounds = Array.from(evt.target.parentElement.parentElement.children[0].children);
             playSelectedSounds(sounds);
         }
     });
@@ -479,10 +525,10 @@ $(function () {
     });
     $(".reset").on("click", function (evt) {
         if ($(evt.target).hasClass("reset")) {
-            putSoundsBack(evt.target.parentElement.previousElementSibling.children[1]);
+            putSoundsBack(evt.target.parentElement.children[1]);
         }
         else {
-            putSoundsBack(evt.target.parentElement.parentElement.previousElementSibling.children[1]);
+            putSoundsBack(evt.target.parentElement.parentElement.children[1]);
         }
     });
     $("area").on("click", function (evt) {
@@ -495,7 +541,6 @@ $(function () {
         const changes = gatherChanges();
         fillForm(changes);
         $("#edit-form").submit();
-        // window.location = `submit/${list_id}`
     })
 
     // parallax scrolling
@@ -504,7 +549,7 @@ $(function () {
         const layers = document.querySelectorAll("[data-type='parallax']");
         if (layers.length !== 0) {
             for (var i = 0; i <= layers.length; i++) {
-                const depth = layers[i].dataset.depth;
+                const depth = $(layers[i]).data("depth");
                 const movement = -(topDistance * depth);
                 const translate3d = 'translate3d(0, ' + movement + 'px, 0)';
                 layers[i].style['-webkit-transform'] = translate3d;
