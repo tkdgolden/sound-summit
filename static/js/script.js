@@ -109,7 +109,7 @@ $(function () {
      * @param {string} script name of the audiofile
      */
     function playScript(script) {
-        audio.src = `/static/audio/sound/PHONEME-apple-whole.mp3`;
+        audio.src = `/static/audio/script/${script}.m4a`;
         $("#status").text(audio.readyState);
         audio.play();
         $("#status").text(audio.readyState);
