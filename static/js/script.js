@@ -116,36 +116,6 @@ $(function () {
         // });
     }
 
-    function playLongScript(script1, script2, script3, script4) {
-        audio.src = `/static/audio/script/${script1}.m4a`;
-        const secondAudio = new Audio();
-        const thirdAudio = new Audio();
-        const fourthAudio = new Audio();
-        audio.play();
-        $(audio).on("ended", function () {
-            secondAudio.play();
-        });
-        $(audio).on("canplay", function () {
-            console.log("HERE1");
-            secondAudio.src = `/static/audio/script/${script2}.m4a`;
-        });
-        $(secondAudio).on("ended", function () {
-            thirdAudio.play();
-        });
-        $(secondAudio).on("canplay", function () {
-            console.log("HERE2");
-            thirdAudio.src = `/static/audio/script/${script3}.m4a`;
-        });
-        $(thirdAudio).on("ended", function () {
-            fourthAudio.play();
-        });
-        $(thirdAudio).on("canplay", function () {
-            console.log("HERE3");
-            fourthAudio.src = `/static/audio/script/${script4}.m4a`;
-        });
-
-    }
-
     /**
      * displays a new random word from the global wordsToDo array
      */
@@ -438,6 +408,10 @@ $(function () {
         }
     }
     
+    /**
+     * collects edits to be sent in form
+     * @returns Array of each word as a string of ipa symbols
+     */
     function gatherChanges() {
         var wordsArray = [];
         $(".edit").each(function () {
@@ -447,6 +421,10 @@ $(function () {
         return wordsArray;
     }
 
+    /**
+     * Takes array list of words as strings of ipa symbols and enters them into an invisible form.
+     * @param {Array} changes 
+     */
     function fillForm(changes) {
         const form = $("#edit-form");
         for (var i = 1; i <= 12; i++) {
@@ -541,7 +519,7 @@ $(function () {
         const changes = gatherChanges();
         fillForm(changes);
         $("#edit-form").submit();
-    })
+    });
 
     // parallax scrolling
     window.addEventListener("scroll", function() {
@@ -559,7 +537,7 @@ $(function () {
                 layers[i].style.transform = translate3d;
             }
         }
-    })
+    });
 
     // for help on ipads scrolling
     var deviceAgent = navigator.userAgent.toLowerCase();
